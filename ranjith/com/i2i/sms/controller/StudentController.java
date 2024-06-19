@@ -30,81 +30,81 @@ public class StudentController {
     *
     */
     public void addStudentDetail() {
-        boolean validNameOrNot = true;
+        boolean isValidName = true;
         String name = "";
-        while(validNameOrNot) {
+        while(isValidName) {
             System.out.println("Enter the Student Name");
             name = scanner.next();
-            validNameOrNot = CommonUtil.isValidName(name);
+            isValidName = CommonUtil.isValidString(name);
 
-            if (!validNameOrNot) {
+            if (!isValidName) {
                 System.out.println("Student name should have only lowercase,uppercase letter and may contain space");
-                validNameOrNot = true;
+                isValidName = true;
             } else {
                 break;
             }
         }
     
         String studentMark = "";
-        boolean validMarkOrNot = true;
+        boolean isValidMark = true;
         int mark = 0; 
-        while(validMarkOrNot) {
+        while(isValidMark) {
             System.out.println("Enter the Student Mark");
             studentMark = scanner.next();
-            validMarkOrNot = CommonUtil.isValidNumber(studentMark);
+            isValidMark = CommonUtil.isValidNumber(studentMark);
     
-            if (!validMarkOrNot) {
+            if (!isValidMark) {
                 System.out.println("Student mark should be integer");
-                validMarkOrNot = true;
+                isValidMark = true;
             } else {
                 mark = Integer.parseInt(studentMark);
-                validMarkOrNot = CommonUtil.isValidRangeOfNumber(mark,0,100);
-                if (!validMarkOrNot) {
+                isValidMark = CommonUtil.isValidRangeOfNumber(mark,0,100);
+                if (!isValidMark) {
                     System.out.println("Student mark should ranges between 0 to 100");
-                    validMarkOrNot = true;
+                    isValidMark = true;
                 } else {
                     break;
                 }
             }
         }
 
-        boolean validation = true;
+        boolean isValiDob = true;
         String date = "";
         Date dob = null;
-        while (validation) {
+        while (isValiDob) {
             System.out.println("Enter the Student Dob in format DD/MM/YYYY");
             date = scanner.next();
             dob = DateUtil.validateDateFormat(date);
             if (dob == null) {
                 System.out.println("Invalid date format");
-                validation = true;
+                isValiDob = true;
             } else {
                 break;
             }
         }
     
-        boolean validOrNot = true;
+        boolean isValid = true;
         String studentStandard = "";
         int standard = 0;
-        while(validOrNot) {
+        while(isValid) {
             System.out.println("Enter the Student grade");
             studentStandard = scanner.next();
-            validOrNot = CommonUtil.isValidNumber(studentStandard);
-            if (!validOrNot) {
+            isValid = CommonUtil.isValidNumber(studentStandard);
+            if (!isValid) {
                 System.out.println("Student grade should be integer..");
-                validOrNot = true;
+                isValid = true;
             } else {
                 standard = Integer.parseInt(studentStandard);
-                validOrNot = CommonUtil.isValidRangeOfNumber(standard,1,12);
+                isValid = CommonUtil.isValidRangeOfNumber(standard,1,12);
 
-                if (validOrNot) {
-                    while(validOrNot) {
+                if (isValid) {
+                    while(isValid) {
                         System.out.println("Enter the Student Section: ");
                         char section = scanner.next().charAt(0);
-                        validOrNot = CommonUtil.isUppercaseCharacter(section);
+                        isValid = CommonUtil.isUppercaseCharacter(section);
 
-                        if (validOrNot) {
-                            while(validOrNot) {
+                        if (isValid) {
+                            while(isValid) {
                                 System.out.println("Enter the student address");
                                   
                                 System.out.println("Enter the Door Number: ");
@@ -113,53 +113,52 @@ public class StudentController {
                                 System.out.println("Enter the street: ");
                                 String street = scanner.next();
 
-                                if (CommonUtil.isValidName(street)) {
+                                if (CommonUtil.isValidString(street)) {
                                     System.out.println("Enter the city: ");
                                     String city = scanner.next();
                                     
-                                    if (CommonUtil.isValidName(city)) {
+                                    if (CommonUtil.isValidString(city)) {
                                         System.out.println("Enter the state: ");
                                         String state = scanner.next();
                                         
-                                        if (CommonUtil.isValidName(state)){
+                                        if (CommonUtil.isValidString(state)){
                                             System.out.println("Enter the pincode: ");
                                             String pin = scanner.next();
                           
-                                            if (CommonUtil.isValidNumber(pin)) {
+                                            if (CommonUtil.isValidString(pin)) {
                                                 int pincode = Integer.parseInt(pin);
                                                 Student student = studentService.createStudent(name, mark, dob, doorNo, street, city, state, pincode);
                                                 if (studentService.createStudentDetail(standard, section, student)) {
                                                     System.out.println("Student detail succesfully added..");
                                                 } 
-                                                validOrNot = false;
+                                                isValid = false;
                                             } else {
                                                 System.out.println("Enter the pincode in correct format..");
-                                                validOrNot = true;
+                                                isValid = true;
                                             }
                                         } else {
                                             System.out.println("Enter the state in correct format..");
-                                            validOrNot = true;
+                                            isValid = true;
                                         }
                                     } else {
                                         System.out.println("Enter the city in correct format..");
-                                        validOrNot = true;
+                                        isValid = true;
                                     }
                                 } else {
                                     System.out.println("Enter the street in correct format..");
-                                    validOrNot = true;
+                                    isValid = true;
                                 }
                             }
                             
                         } else {
                             System.out.println("Student section not valid..");
-                            validOrNot = true;
+                            isValid = true;
                         } 
                     }
                 } else {
-                    validOrNot = true;
+                    isValid = true;
                     System.out.println("Student grade should range from 1 to 12..");
                 } 
-             
             }    
         }
     }
