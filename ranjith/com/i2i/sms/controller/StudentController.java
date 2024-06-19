@@ -16,7 +16,7 @@ import com.i2i.sms.utils.CommonUtil;
 import com.i2i.sms.utils.DateUtil;
  
 /**
-* Implementation to handle student and their grade details.
+* Implementation to handle student, grade and their address.
 */
 public class StudentController {
     
@@ -25,7 +25,7 @@ public class StudentController {
     
    /**
     * <p>
-    * Get all the student detail such as name, mark, dob, standard and section
+    * Get all the student detail such as name, mark, dob, standard, section and their address.
     * </p>
     *
     */
@@ -58,7 +58,7 @@ public class StudentController {
                 isValidMark = true;
             } else {
                 mark = Integer.parseInt(studentMark);
-                isValidMark = CommonUtil.isValidRangeOfNumber(mark,0,100);
+                isValidMark = CommonUtil.isValidRangeOfNumber(mark, 0, 100);
                 if (!isValidMark) {
                     System.out.println("Student mark should ranges between 0 to 100");
                     isValidMark = true;
@@ -71,7 +71,7 @@ public class StudentController {
         boolean isValiDob = true;
         String date = "";
         Date dob = null;
-        while (isValiDob) {
+        while(isValiDob) {
             System.out.println("Enter the Student Dob in format DD/MM/YYYY");
             date = scanner.next();
             dob = DateUtil.validateDateFormat(date);
@@ -125,7 +125,7 @@ public class StudentController {
                                             System.out.println("Enter the pincode: ");
                                             String pin = scanner.next();
                           
-                                            if (CommonUtil.isValidString(pin)) {
+                                            if (CommonUtil.isValidNumber(pin)) {
                                                 int pincode = Integer.parseInt(pin);
                                                 Student student = studentService.createStudent(name, mark, dob, doorNo, street, city, state, pincode);
                                                 if (studentService.createStudentDetail(standard, section, student)) {
@@ -177,7 +177,7 @@ public class StudentController {
         if(student == null) {
             System.out.println("No student enrolled by this rollNo " + rollNo);
         } else {
-            int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(),null);
+            int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
             System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
             System.out.println("\t\t\tSection: " + student.getGrade().getStandard());
             System.out.println(student);
@@ -235,7 +235,6 @@ public class StudentController {
         for(int i=0;i < noOfClubs;i++){
             clubIds[i] = scanner.nextInt();
         }
-
         Student student = studentService.getStudentDetailByRollNo(rollNo);
         studentService.assignStudentToClub(student, clubIds);
     }

@@ -41,8 +41,7 @@ public class ClubService {
         count--;
         club.setCount(count);
 
-        return clubDao.insertClub(club);
-                  
+        return clubDao.insertClub(club);          
     }
 
    /**

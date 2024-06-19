@@ -23,7 +23,6 @@ import com.i2i.sms.service.GradeService;
 public class StudentService {
     
     private StudentDao studentDao = new StudentDao();
-    private ClubDao clubDao = new ClubDao();
     private GradeService gradeService = new GradeService();
     private ClubService clubService = new ClubService();
 
@@ -48,20 +47,16 @@ public class StudentService {
             grade.setStandard(standard);
             grade.setSection(section);
             grade.setSectionCount(grade.getSectionCount()-1);
-
             student.setGrade(grade);
-         
             return studentDao.createStudentDetail(student);
         } else {
             student.setGrade(gradeWithStandard);
-
             if (studentDao.createStudentDetail(student)) {
                 return gradeService.updateCountOfGrade(gradeWithStandard.getGradeId(), false);
             } else {
                 return false;
             }
         }
-
     }
 
    /**
@@ -82,13 +77,12 @@ public class StudentService {
     * </p>
     *
     * @param rollNo
-    *         RollNo of student passed as int.
+    *        RollNo of student passed as int.
     * @throws StudentException if unable to get student detail of particular rollNo.
     * @return Student detail if the rollNo of student exist or else null
     */
     public Student getStudentDetailByRollNo(int rollNo) {
         return studentDao.retrieveStudentDetailByRollNo(rollNo);
-      
     }
     
 
@@ -99,7 +93,7 @@ public class StudentService {
     * </p>
     *
     * @param rollNo
-    *        RollNo of student as int.
+    *        RollNo of student as integer.
     * @throws StudentException if rollNo of student not exist.
     * @return Boolean type as true if student detail gets removed or else return false
     */
@@ -155,9 +149,7 @@ public class StudentService {
         address.setCity(city);
         address.setState(state);
         address.setPincode(pincode);
-         
         student.setAddress(address);
-        
         return student;
     }
 

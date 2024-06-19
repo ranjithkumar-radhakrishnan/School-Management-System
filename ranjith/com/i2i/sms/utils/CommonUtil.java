@@ -14,10 +14,8 @@ public final class CommonUtil{
 
     /**
     * <p>
-    *
     * It validates whether the given name is valid or not.
     * It checks whether it contains any special characters or numbers rather than lowercase,uppercase letters and spaces.
-    *
     * </p>
     *
     * @param dob
@@ -25,31 +23,27 @@ public final class CommonUtil{
     *
     * @return Boolean type as true if the given name is valid or else returns false.
     */
-    public static boolean isValidName(String name){
-        boolean validNameOrNot = true;
-
-        for(int i=0;i<name.length();i++) {
-            if(name.charAt(i) >= 65 && name.charAt(i) <= 90) {
+    public static boolean isValidString(String str) {
+        boolean isValidString = true;
+        for(int i=0;i < str.length();i++) {
+            if(str.charAt(i) >= 65 && str.charAt(i) <= 90) {
                 continue;
-            } else if(name.charAt(i) >= 97 && name.charAt(i) <= 122) {
+            } else if(str.charAt(i) >= 97 && str.charAt(i) <= 122) {
                 continue;
-            } else if(name.charAt(i) == ' ') {
+            } else if(str.charAt(i) == ' ') {
                 continue;
             } else {
-                validNameOrNot = false;
+                isValidString = false;
                 break;
             }
         }
-      
-      return validNameOrNot;
+      return isValidString;
     }
   
 
     /**
     * <p>
-    *
     * Validates whether the given positive or negative number is integer or not.
-    *
     * </p>
     *
     * @param number
@@ -59,9 +53,7 @@ public final class CommonUtil{
     * @return Boolean type as true if number is integer or else false
     */
     public static boolean isValidNumber(String number) {
-        
         boolean validIntegerOrNot = true;
-   
         for(int i=0;i<number.length();i++) {
             if(number.charAt(0)=='-') {
                 continue;
@@ -79,10 +71,8 @@ public final class CommonUtil{
    
     /**
     * <p>
-    *
     * Validates the given integer is within the given range.
     * The range that have to be checked is passed as second, third parameter as integer.
-    *
     * </p>
     *
     * @param number
@@ -100,7 +90,6 @@ public final class CommonUtil{
     *         If start Range is greater than end Range then it returns false
     */
     public static boolean isValidRangeOfNumber(int number, int startRange, int endRange) {
-
         if(number >= startRange && number <= endRange) {
             return true;
         } else {
@@ -110,9 +99,7 @@ public final class CommonUtil{
 
     /**
     * <p>
-    *
     * It validates whether the given character is uppercase alphabetical or not.
-    *
     * </p>
     *
     * @param character
@@ -120,9 +107,7 @@ public final class CommonUtil{
     *
     * @return Boolean type as true if the given character is uppercase alphabetic or else false
     */
-
-    public static boolean isUppercaseCharacter(char character) {
-        
+    public static boolean isUppercaseCharacter(char character) {  
         if(character >= 65 && character <= 90 ) {
             return true;
         } else {

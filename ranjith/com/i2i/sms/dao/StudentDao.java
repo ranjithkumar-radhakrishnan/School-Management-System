@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory; 
 import org.hibernate.Transaction; 
 
-import com.i2i.sms.exception.HibernateConnectionException;
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Club;
@@ -54,8 +53,8 @@ public class StudentDao {
     * </p>
     *
     * @param student
-    *        Student which contains the information such as roll No, name, mark, dob
-    * @throws StudentException if unable to add the student to clubs
+    *        Student which contains the information such as roll No, name, mark, dob.
+    * @throws StudentException if unable to add the student to clubs.
     * @return Boolean value as true if it adds the student to clubs
     */
     public boolean insertStudentToClub(Student student) {
@@ -75,7 +74,7 @@ public class StudentDao {
   
    /**
     * <p>
-    * It fetches all the student details
+    * It fetches all the student details.
     * </p>
     *
     * @throws StudentException if unable to fetch the student detail.
@@ -92,7 +91,7 @@ public class StudentDao {
         } 
     }
 
-    /**
+   /**
     * <p>
     * Retrieve student detail by rollNo
     * </p>
@@ -125,21 +124,21 @@ public class StudentDao {
     public boolean deleteStudentByRollNo(int rollNo) {
         Transaction transaction = null;
         Student student = null;
+        boolean isDelete = false;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
             transaction = session.beginTransaction(); 
             student = session.get(Student.class, rollNo);
             if (null != student) {
                 session.delete(student);
-                return true;
+                transaction.commit();
+                isDelete = true;
             }
-            transaction.commit();
         } catch (Exception e) { 
             if (transaction != null || transaction.isActive()) {
                 transaction.rollback();
             }
             throw new StudentException("Unable to delete the student with rollNo " + rollNo, e);
         } 
-        return false;
+        return isDelete;
     }
-
 }

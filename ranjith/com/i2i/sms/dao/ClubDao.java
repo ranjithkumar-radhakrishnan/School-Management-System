@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory; 
 import org.hibernate.Transaction; 
 
-import com.i2i.sms.exception.DatabaseConnectionException;
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Club;
@@ -141,7 +140,6 @@ public class ClubDao {
             } else {
                 return false;
             }
-
             session.update(club);         
             transaction.commit();
             return true;

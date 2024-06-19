@@ -20,7 +20,7 @@
             <column name="grade_id" /> 
           </many-to-one>
           
-          <set name = "clubs" table = "student_club" inverse="false" lazy="true" fetch="select" cascade="all">
+          <set name = "clubs" table = "student_club" inverse="false" lazy="true" fetch="select" cascade="save-update">
           <key column = "student_id"></key>
           <many-to-many class = "com.i2i.sms.model.Club" column = "club_id"></many-to-many>
           </set>

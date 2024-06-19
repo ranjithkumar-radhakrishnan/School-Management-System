@@ -21,14 +21,13 @@ public class GradeService {
     * @param standard
     *        grade of student as int.
     * @param section
-             section of student as character
+    *        section of student as character
     * @throws StudentException if the grade not found with given standard and section.
     * @return Grade detail if present or else null
     */
     public Grade getGradeWithStandardAndSection(int standard, char section) {
         return gradeDao.getGradeWithStandardAndSection(standard, section);
     }
-
 
    /**
     * <p>

@@ -15,8 +15,7 @@ public class Main {
     }
     
     public void startApplication() {
-         boolean loop = true;
-        
+         boolean loop = true;   
         while (loop) {
             System.out.println();
             System.out.println("Enter 1 to add Student details\n" +

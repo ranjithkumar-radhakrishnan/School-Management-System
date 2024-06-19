@@ -6,6 +6,5 @@ package com.i2i.sms.service;
 *
 */
 public class AddressService {
-
        
 }

@@ -7,9 +7,7 @@ import java.lang.Exception;
 * 
 */
 public class StudentException extends RuntimeException {
-     
     public StudentException(String message, Throwable e) {
         super(message, e);
     }
-  
 }

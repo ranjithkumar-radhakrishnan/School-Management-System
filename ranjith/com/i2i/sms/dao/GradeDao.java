@@ -40,10 +40,8 @@ public class GradeDao {
         } catch (Exception e) {
             throw new StudentException("Unable to get grade with standard " + standard + " and section" + section, e);
         } 
-
     }
     
-
    /**
     * <p>
     * Updates the grade count, either increased by one or decreased by one

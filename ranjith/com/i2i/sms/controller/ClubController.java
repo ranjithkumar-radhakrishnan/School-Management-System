@@ -11,6 +11,9 @@ import com.i2i.sms.model.Student;
 import com.i2i.sms.service.ClubService;
 import com.i2i.sms.service.StudentService;
 
+/**
+* Implementation to handle club details.
+*/
 public class ClubController {
 
     private Scanner scanner = new Scanner(System.in);
@@ -58,7 +61,6 @@ public class ClubController {
                 case 6:
                     loopCondition = false;
                     break;
-
             }
         }
     }
@@ -74,54 +76,25 @@ public class ClubController {
     public void getClubDetail(String clubName) {    
         System.out.println("Enter the club President: ");
         String president = scanner.next();
-   
         System.out.println("Enter the club website: ");
         String website = scanner.next();
-  
         System.out.println("Enter the club Count: ");
         int count = scanner.nextInt();
-
         if(clubService.addClubDetail(clubName, president, website, count)) {
             System.out.println("Club created successfully...");
         }          
      }
 
-   /**
-    * <p>
-    * To add the student to clubs
-    * </p>
-    * 
-    */
-    public void addStudentToClub() {
-        System.out.println("Enter the Student Roll No:");
-        int rollNo = scanner.nextInt();
-        System.out.println("Enter the no of clubs you want to add:");
-        int noOfClubs = scanner.nextInt();
-
-        int clubIds[] = new int[noOfClubs];
-
-        System.out.println("Enter the club Ids:");
-        for(int i=0;i < noOfClubs;i++){
-            clubIds[i] = scanner.nextInt();
-        }
-        
-        Student student = studentService.getStudentDetailByRollNo(rollNo);
-        clubService.addStudentToClub(clubIds, student);
-    }
-
     /**
     * <p>
     * To list all the students who are enrolled in particular club.
     * </p>
-    *
     */
     public void printAllStudentsOfClub() {
        List<Club> clubs = clubService.getAllClubs();
        clubs.forEach(club -> System.out.println(club.getId() + "-" +club.getName()));
-        
        System.out.println("Enter the club id");
        int clubId = scanner.nextInt();
-
        Set<Student> students = clubService.showAllStudentsOfClub(clubId);
        for(Student student : students) {
            System.out.println(student);

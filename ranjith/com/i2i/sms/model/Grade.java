@@ -9,12 +9,12 @@ import com.i2i.sms.model.Student;
 *This class represents a Grade with basic information such as standard, section, List of student detail, sectionCount and unique grade Id.
 */
 public class Grade { 
+
     private int gradeId;
     private int standard;
     private char section;
     private Set<Student> students;
     private int sectionCount = 3;
-    
 
     public void setGradeId(int gradeId) {
         this.gradeId = gradeId;
@@ -57,5 +57,4 @@ public class Grade {
                      .append("\n\t\tsection: ").append(section);
         return stringBuilder.toString();
     }
-  
 }

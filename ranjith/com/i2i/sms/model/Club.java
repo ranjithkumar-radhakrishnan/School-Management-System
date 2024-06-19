@@ -67,5 +67,4 @@ public class Club {
                      .append("\n\t\tcount: ").append(count);
         return stringBuilder.toString();
     }
-
 }
