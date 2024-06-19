@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-mapping PUBLIC  
+          "-//Hibernate/Hibernate Mapping DTD 5.3//EN"  
+          "http://hibernate.sourceforge.net/hibernate-mapping-5.3.dtd">  
+  
+   <hibernate-mapping>  
+
+          <class name="com.i2i.sms.model.Student" table="student">  
+          <id name="rollNo" column = "student_id">  
+          <generator class="increment"></generator>  
+          </id>  
+
+          <property name="name" column = "student_name"></property>  
+          <property name="mark" column = "student_mark"></property>  
+          <property name="dob" column = "student_dob"></property>  
+          
+          <one-to-one name="address" class="com.i2i.sms.model.Address" cascade="all"></one-to-one> 
+ 
+          <many-to-one name="grade" class="com.i2i.sms.model.Grade" cascade="save-update">
+            <column name="grade_id" /> 
+          </many-to-one>
+          
+          <set name = "clubs" table = "student_club" inverse="false" lazy="true" fetch="select" cascade="all">
+          <key column = "student_id"></key>
+          <many-to-many class = "com.i2i.sms.model.Club" column = "club_id"></many-to-many>
+          </set>
+
+          </class>       
+            
+   </hibernate-mapping>  
