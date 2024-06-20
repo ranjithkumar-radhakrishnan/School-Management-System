@@ -1,7 +1,5 @@
 package com.i2i.sms.model;
 
-import com.i2i.sms.model.Student;
-
 /**
 * This class represents a address of the student which contains information such as address Id, doorNo, street, city, state, pincode.
 */
