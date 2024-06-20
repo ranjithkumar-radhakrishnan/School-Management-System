@@ -12,9 +12,6 @@ import com.i2i.sms.model.Address;
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Grade;
 import com.i2i.sms.model.Student;
-import com.i2i.sms.service.ClubService;
-import com.i2i.sms.service.GradeService;
-
 /**
 *
 *This class implemented to store, collect, search and remove the student details.
