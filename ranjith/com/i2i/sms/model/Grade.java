@@ -2,9 +2,6 @@ package com.i2i.sms.model;
 
 import java.util.Set;
 import java.util.HashSet;
-
-import com.i2i.sms.model.Student;
-
 /**
 *This class represents a Grade with basic information such as standard, section, List of student detail, sectionCount and unique grade Id.
 */
