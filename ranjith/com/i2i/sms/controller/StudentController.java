@@ -22,7 +22,6 @@ public class StudentController {
     
     private Scanner scanner = new Scanner(System.in);
     private StudentService studentService = new StudentService();
-    
    /**
     * <p>
     * Get all the student detail such as name, mark, dob, standard, section and their address.
@@ -36,7 +35,6 @@ public class StudentController {
             System.out.println("Enter the Student Name");
             name = scanner.next();
             isValidName = CommonUtil.isValidString(name);
-
             if (!isValidName) {
                 System.out.println("Student name should have only lowercase,uppercase letter and may contain space");
                 isValidName = true;
@@ -44,7 +42,6 @@ public class StudentController {
                 break;
             }
         }
-    
         String studentMark = "";
         boolean isValidMark = true;
         int mark = 0; 
@@ -52,7 +49,6 @@ public class StudentController {
             System.out.println("Enter the Student Mark");
             studentMark = scanner.next();
             isValidMark = CommonUtil.isValidNumber(studentMark);
-    
             if (!isValidMark) {
                 System.out.println("Student mark should be integer");
                 isValidMark = true;
@@ -96,17 +92,14 @@ public class StudentController {
             } else {
                 standard = Integer.parseInt(studentStandard);
                 isValid = CommonUtil.isValidRangeOfNumber(standard,1,12);
-
                 if (isValid) {
                     while(isValid) {
                         System.out.println("Enter the Student Section: ");
                         char section = scanner.next().charAt(0);
                         isValid = CommonUtil.isUppercaseCharacter(section);
-
                         if (isValid) {
                             while(isValid) {
-                                System.out.println("Enter the student address");
-                                  
+                                System.out.println("Enter the student address");        
                                 System.out.println("Enter the Door Number: ");
                                 String doorNo = scanner.next();
                                  
@@ -115,16 +108,13 @@ public class StudentController {
 
                                 if (CommonUtil.isValidString(street)) {
                                     System.out.println("Enter the city: ");
-                                    String city = scanner.next();
-                                    
+                                    String city = scanner.next();            
                                     if (CommonUtil.isValidString(city)) {
                                         System.out.println("Enter the state: ");
-                                        String state = scanner.next();
-                                        
+                                        String state = scanner.next(); 
                                         if (CommonUtil.isValidString(state)){
                                             System.out.println("Enter the pincode: ");
                                             String pin = scanner.next();
-                          
                                             if (CommonUtil.isValidNumber(pin)) {
                                                 int pincode = Integer.parseInt(pin);
                                                 Student student = studentService.createStudent(name, mark, dob, doorNo, street, city, state, pincode);
@@ -149,7 +139,6 @@ public class StudentController {
                                     isValid = true;
                                 }
                             }
-                            
                         } else {
                             System.out.println("Student section not valid..");
                             isValid = true;
@@ -228,9 +217,7 @@ public class StudentController {
         int rollNo = scanner.nextInt();
         System.out.println("Enter the no of clubs you want to add:");
         int noOfClubs = scanner.nextInt();
-
         int clubIds[] = new int[noOfClubs];
-
         System.out.println("Enter the club Ids:");
         for(int i=0;i < noOfClubs;i++){
             clubIds[i] = scanner.nextInt();
