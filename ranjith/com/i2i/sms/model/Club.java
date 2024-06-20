@@ -2,8 +2,6 @@ package com.i2i.sms.model;
 
 import java.util.Set;
 import java.util.HashSet;
-
-import com.i2i.sms.model.Student;
 /**
 * This class represents a club which contains the information such as name, president, website, count.
 */
