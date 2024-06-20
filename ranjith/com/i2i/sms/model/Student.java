@@ -4,8 +4,6 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Date;
 
-import com.i2i.sms.model.Address;
-
 /**
 *This class represents a student which contains their information such as Id, name, date of birth, age and their grade Id.
 */
