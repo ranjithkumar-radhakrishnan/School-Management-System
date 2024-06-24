@@ -35,12 +35,15 @@ public class StudentDao {
     public boolean createStudentDetail(Student student) {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {  
-            transaction = session.beginTransaction(); 
+            transaction = session.beginTransaction();
+            System.out.println("vanakam");
             session.save(student);
-            transaction.commit(); 
+            System.out.println("byee");
+            transaction.commit();
+            System.out.println("byee22");
             return true;
         } catch (Exception e) { 
-            if (transaction != null || transaction.isActive()) {
+            if (null != transaction ) {
                transaction.rollback();
             }
             throw new StudentException("Unable to add the student detail with rollNo " + student.getRollNo(), e);

@@ -1,16 +1,10 @@
 package com.i2i.sms.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
-import com.i2i.sms.service.ClubService;
 import com.i2i.sms.service.StudentService;
 import com.i2i.sms.utils.CommonUtil;
 import com.i2i.sms.utils.DateUtil;
@@ -167,7 +161,7 @@ public class StudentController {
         } else {
             int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
             System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
-            System.out.println("\t\t\tSection: " + student.getGrade().getStandard());
+            System.out.println("\t\t\tSection: " + student.getGrade().getSection());
             System.out.println(student);
             System.out.println("\t\tStudent Age: "+age);
         }

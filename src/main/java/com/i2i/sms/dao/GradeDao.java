@@ -31,8 +31,10 @@ public class GradeDao {
     */
     public Grade getGradeWithStandardAndSection(int standard, char section) {
         Grade grade = null;
-        try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
+        try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            System.out.println("hellooo");
             Query query = session.createQuery("from Grade where standard = :standard and section = :section");
+            System.out.println("good morning");
             query.setParameter("standard", standard);
             query.setParameter("section", section);
             grade = (Grade) query.uniqueResult();
@@ -78,5 +80,29 @@ public class GradeDao {
             }
             throw new StudentException("Unable to update the count of grade with Id " + gradeId, e);
         } 
+    }
+    /**
+     * <p>
+     * Creates the grade with standard and section.
+     * </p>
+     *
+     * @param grade
+     *        Grade which contains the standard and section.
+     * @throws StudentException if unable to create the grade.
+     * @return Grade which contains standard and section
+     */
+    public Grade insertGrade(Grade grade) {
+        Transaction transaction = null;
+        try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(grade);
+            transaction.commit();
+            return grade;
+        } catch (Exception e) {
+            if (null != transaction ) {
+                transaction.rollback();
+            }
+            throw new StudentException("Unable to add the grade with standard " + grade.getStandard(), e);
+        }
     }
 }

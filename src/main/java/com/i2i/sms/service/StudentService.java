@@ -40,10 +40,7 @@ public class StudentService {
     public boolean createStudentDetail(int standard, char section, Student student) {
         Grade gradeWithStandard = gradeService.getGradeWithStandardAndSection(standard, section);
         if (null == gradeWithStandard) {
-            Grade grade = new Grade();
-            grade.setStandard(standard);
-            grade.setSection(section);
-            grade.setSectionCount(grade.getSectionCount()-1);
+            Grade grade = gradeService.createGrade(standard, section);
             student.setGrade(grade);
             return studentDao.createStudentDetail(student);
         } else {

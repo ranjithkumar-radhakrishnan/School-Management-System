@@ -10,6 +10,7 @@ import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
 import com.i2i.sms.service.ClubService;
 import com.i2i.sms.service.StudentService;
+import com.i2i.sms.utils.DateUtil;
 
 /**
 * Implementation to handle club details.
@@ -96,7 +97,11 @@ public class ClubController {
        int clubId = scanner.nextInt();
        Set<Student> students = clubService.showAllStudentsOfClub(clubId);
        for(Student student : students) {
+           int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
+           System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
+           System.out.println("\t\t\tSection: " + student.getGrade().getSection());
            System.out.println(student);
+           System.out.println("\t\tStudent age: " + age);
        }
     }
 }

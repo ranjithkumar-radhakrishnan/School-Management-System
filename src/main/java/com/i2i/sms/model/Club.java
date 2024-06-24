@@ -1,18 +1,34 @@
 package com.i2i.sms.model;
 
+import jakarta.persistence.*;
+
 import java.util.Set;
-import java.util.HashSet;
 
 /**
 * This class represents a club which contains the information such as name, president, website, count.
 */
+@Entity
+@Table(name = "club")
 public class Club {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "club_id")
     private int id;
+
+    @Column(name = "club_name")
     private String name;
+
+    @Column(name = "club_president")
     private String president;
+
+    @Column(name = "club_website")
     private String website;
+
+    @Column(name = "club_count")
     private int count;
+
+    @ManyToMany(mappedBy = "clubs", fetch = FetchType.LAZY)
     private Set<Student> students;
 
     public void setId(int id) {

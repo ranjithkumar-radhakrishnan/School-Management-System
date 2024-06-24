@@ -1,20 +1,45 @@
 package com.i2i.sms.model;
 
+import jakarta.persistence.*;
+
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Date;
 
 /**
 *This class represents a student which contains their information such as Id, name, date of birth, age and their grade Id.
 */
+@Entity
+@Table(name = "student")
 public class Student {
- 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
     private int rollNo;
+
+    @Column(name = "student_name")
     private String name;
+
+    @Column(name = "student_mark")
     private int mark;
+
+    @Column(name = "student_dob")
     private Date dob;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
     private Address address;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "grade_id")
     private Grade grade;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "student_club",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "club_id")
+    )
     private Set<Club> clubs;
 
     public void setRollNo(int rollNo) {
