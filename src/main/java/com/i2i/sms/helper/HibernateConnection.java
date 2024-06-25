@@ -1,11 +1,9 @@
 
 package com.i2i.sms.helper;
 
-import org.hibernate.Session;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.SessionFactory;
 
 /**
  * This class that provides a Hibernate SessionFactory instance.
@@ -18,7 +16,14 @@ public class HibernateConnection{
     //It creates the sessionFactory instance
     private static SessionFactory buildSessionFactory() {
         try {
-            return new Configuration().configure().buildSessionFactory();
+            Dotenv dotenv = Dotenv.load();
+            Configuration configuration = new Configuration();
+            configuration.setProperty("hibernate.connection.driver_class", dotenv.get("DB_DRIVER"));
+            configuration.setProperty("hibernate.connection.url", dotenv.get("DB_URL"));
+            configuration.setProperty("hibernate.connection.username", dotenv.get("DB_USERNAME"));
+            configuration.setProperty("hibernate.connection.password", dotenv.get("DB_PASSWORD"));
+            configuration.configure("hibernate.cfg.xml");
+            return configuration.buildSessionFactory();
         } catch (Throwable e) {
             throw new ExceptionInInitializerError(e);
         }

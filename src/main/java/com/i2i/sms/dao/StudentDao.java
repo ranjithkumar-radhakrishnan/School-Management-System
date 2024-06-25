@@ -1,19 +1,15 @@
 package com.i2i.sms.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.cfg.Configuration; 
 import org.hibernate.query.Query; 
-import org.hibernate.Session; 
-import org.hibernate.SessionFactory; 
+import org.hibernate.Session;
 import org.hibernate.Transaction; 
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
-import com.i2i.sms.model.Club;
-import com.i2i.sms.model.Grade;
 import com.i2i.sms.model.Student;
+
 
 /**
 *
@@ -21,7 +17,7 @@ import com.i2i.sms.model.Student;
 *
 */
 public class StudentDao {
-  
+
    /**
     * <p>
     * Adds the student detail.
@@ -35,12 +31,12 @@ public class StudentDao {
     public boolean createStudentDetail(Student student) {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {  
-            transaction = session.beginTransaction(); 
+            transaction = session.beginTransaction();
             session.save(student);
-            transaction.commit(); 
+            transaction.commit();
             return true;
         } catch (Exception e) { 
-            if (transaction != null || transaction.isActive()) {
+            if (null != transaction ) {
                transaction.rollback();
             }
             throw new StudentException("Unable to add the student detail with rollNo " + student.getRollNo(), e);

@@ -10,6 +10,9 @@ import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
 import com.i2i.sms.service.ClubService;
 import com.i2i.sms.service.StudentService;
+import com.i2i.sms.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
 * Implementation to handle club details.
@@ -19,6 +22,7 @@ public class ClubController {
     private Scanner scanner = new Scanner(System.in);
     private StudentService studentService = new StudentService();
     private ClubService clubService = new ClubService();
+    private static final Logger logger = LoggerFactory.getLogger(ClubController.class);
    /**
     * <p>
     * Get the clubName from student to them into particular club.
@@ -79,8 +83,15 @@ public class ClubController {
         String website = scanner.next();
         System.out.println("Enter the club Count: ");
         int count = scanner.nextInt();
-        if(clubService.addClubDetail(clubName, president, website, count)) {
-            System.out.println("Club created successfully...");
+        boolean isAdded = false;
+        try {
+            isAdded = clubService.addClubDetail(clubName, president, website, count);
+        }catch(Exception e){
+            logger.error("Unable to add the club detail whose clubName {}", clubName);
+            e.printStackTrace();
+        }
+        if(isAdded) {
+            logger.info("Club detail added successfully whose clubName {}", clubName);
         }          
      }
 
@@ -96,7 +107,11 @@ public class ClubController {
        int clubId = scanner.nextInt();
        Set<Student> students = clubService.showAllStudentsOfClub(clubId);
        for(Student student : students) {
+           int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
+           System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
+           System.out.println("\t\t\tSection: " + student.getGrade().getSection());
            System.out.println(student);
+           System.out.println("\t\tStudent age: " + age);
        }
     }
 }

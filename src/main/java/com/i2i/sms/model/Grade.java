@@ -1,18 +1,28 @@
 package com.i2i.sms.model;
 
+import jakarta.persistence.*;
+
 import java.util.Set;
-import java.util.HashSet;
 
 /**
 *This class represents a Grade with basic information such as standard, section, List of student detail, sectionCount and unique grade Id.
 */
-public class Grade { 
+@Entity
+@Table(name = "grade")
+public class Grade {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "grade_id")
     private int gradeId;
     private int standard;
-    private char section;
-    private Set<Student> students;
+    private Character section;
+
+    @Column(name = "section_count")
     private int sectionCount = 3;
+
+    @OneToMany(mappedBy = "grade", fetch = FetchType.LAZY)
+    private Set<Student> students;
 
     public void setGradeId(int gradeId) {
         this.gradeId = gradeId;

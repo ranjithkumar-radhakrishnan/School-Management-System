@@ -40,10 +40,7 @@ public class StudentService {
     public boolean createStudentDetail(int standard, char section, Student student) {
         Grade gradeWithStandard = gradeService.getGradeWithStandardAndSection(standard, section);
         if (null == gradeWithStandard) {
-            Grade grade = new Grade();
-            grade.setStandard(standard);
-            grade.setSection(section);
-            grade.setSectionCount(grade.getSectionCount()-1);
+            Grade grade = gradeService.createGrade(standard, section);
             student.setGrade(grade);
             return studentDao.createStudentDetail(student);
         } else {
@@ -160,14 +157,18 @@ public class StudentService {
     * @param clubIds
     *        It contains all the club Ids enrolled by the student.
     * @throws StudentException if unable to add the student to clubs
+    * @return Boolean value as true if student added to club successfully
     */
-    public void assignStudentToClub(Student student, int[] clubIds) {
+    public boolean assignStudentToClub(Student student, int[] clubIds) {
         Set<Club> clubs = clubService.getClubsOfStudent(clubIds);
         student.setClubs(clubs);
         if(studentDao.insertStudentToClub(student)) {
             for(int i=0;i<clubIds.length;i++) {
                 clubService.updateCountOfClub(clubIds[i], false);
             }
+            return true;
+        } else {
+            return false;
         }
     }
 }

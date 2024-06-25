@@ -1,14 +1,15 @@
 package com.i2i.sms.dao;
 
-import org.hibernate.cfg.Configuration; 
+import com.i2i.sms.controller.StudentController;
 import org.hibernate.query.Query;
-import org.hibernate.Session; 
-import org.hibernate.SessionFactory; 
+import org.hibernate.Session;
 import org.hibernate.Transaction; 
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Grade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
 *
@@ -17,6 +18,7 @@ import com.i2i.sms.model.Grade;
 */
 public class GradeDao {
 
+    private static final Logger logger = LoggerFactory.getLogger(GradeDao.class);
    /**
     * <p>
     * Get the grade with the given standard and section
@@ -31,7 +33,7 @@ public class GradeDao {
     */
     public Grade getGradeWithStandardAndSection(int standard, char section) {
         Grade grade = null;
-        try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
+        try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             Query query = session.createQuery("from Grade where standard = :standard and section = :section");
             query.setParameter("standard", standard);
             query.setParameter("section", section);
@@ -71,6 +73,7 @@ public class GradeDao {
             }
             session.update(grade);         
             transaction.commit();
+            logger.info("Update the grade Count whose grade Id {}", gradeId);
             return true;
         } catch(Exception e) { 
             if (transaction != null || transaction.isActive()) {
@@ -78,5 +81,30 @@ public class GradeDao {
             }
             throw new StudentException("Unable to update the count of grade with Id " + gradeId, e);
         } 
+    }
+    /**
+     * <p>
+     * Creates the grade with standard and section.
+     * </p>
+     *
+     * @param grade
+     *        Grade which contains the standard and section.
+     * @throws StudentException if unable to create the grade.
+     * @return Grade which contains standard and section
+     */
+    public Grade insertGrade(Grade grade) {
+        Transaction transaction = null;
+        try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(grade);
+            transaction.commit();
+            logger.info("Insert the grade with Id{}", grade.getGradeId());
+            return grade;
+        } catch (Exception e) {
+            if (null != transaction ) {
+                transaction.rollback();
+            }
+            throw new StudentException("Unable to add the grade with standard " + grade.getStandard(), e);
+        }
     }
 }

@@ -1,18 +1,27 @@
 package com.i2i.sms.model;
 
+import jakarta.persistence.*;
+
 /**
 * This class represents a address of the student which contains information such as address Id, doorNo, street, city, state, pincode.
 */
+@Entity
+@Table(name = "address")
 public class Address {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
     private int addressId;
     private String doorNo;
     private String street;
     private String city;
     private String state;
     private int pincode;
+
+    @OneToOne(mappedBy = "address")
     private Student student;
-    
+
     public void setAddressId(int addressId) {
         this.addressId = addressId;
     }

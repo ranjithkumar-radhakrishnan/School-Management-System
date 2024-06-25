@@ -46,4 +46,24 @@ public class GradeService {
     public boolean updateCountOfGrade(int gradeId, boolean isIncrement) {
         return gradeDao.updateGradeCount(gradeId, isIncrement);
     }
+
+    /**
+     * <p>
+     * Creates the grade with standard and section.
+     * </p>
+     *
+     * @param standard
+     *        Grade of the student passed as Integer.
+     * @param section
+     *        Section of the student passed as Character.
+     * @throws StudentException if unable to create the grade.
+     * @return Grade which contains standard and section
+     */
+    public Grade createGrade(int standard, char section) {
+        Grade grade = new Grade();
+        grade.setStandard(standard);
+        grade.setSection(section);
+        grade.setSectionCount(grade.getSectionCount()-1);
+        return gradeDao.insertGrade(grade);
+    }
 }

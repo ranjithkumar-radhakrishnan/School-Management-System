@@ -1,20 +1,16 @@
 package com.i2i.sms.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
-import com.i2i.sms.service.ClubService;
 import com.i2i.sms.service.StudentService;
 import com.i2i.sms.utils.CommonUtil;
 import com.i2i.sms.utils.DateUtil;
- 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
 * Implementation to handle student, grade and their address.
 */
@@ -22,7 +18,7 @@ public class StudentController {
     
     private Scanner scanner = new Scanner(System.in);
     private StudentService studentService = new StudentService();
-    
+    private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
    /**
     * <p>
     * Get all the student detail such as name, mark, dob, standard, section and their address.
@@ -30,6 +26,7 @@ public class StudentController {
     *
     */
     public void addStudentDetail() {
+
         boolean isValidName = true;
         String name = "";
         while(isValidName) {
@@ -117,8 +114,15 @@ public class StudentController {
                                             if (CommonUtil.isValidNumber(pin)) {
                                                 int pincode = Integer.parseInt(pin);
                                                 Student student = studentService.createStudent(name, mark, dob, doorNo, street, city, state, pincode);
-                                                if (studentService.createStudentDetail(standard, section, student)) {
-                                                    System.out.println("Student detail succesfully added..");
+                                                boolean isAdded = false;
+                                                try {
+                                                    isAdded = studentService.createStudentDetail(standard, section, student);
+                                                } catch(Exception e) {
+                                                    logger.error("Unable to add student with rollNo {}", student.getRollNo());
+                                                    e.printStackTrace();
+                                                }
+                                                if (isAdded) {
+                                                    logger.info("Student detail successfully added whose rollNo {}", student.getRollNo());
                                                 } 
                                                 isValid = false;
                                             } else {
@@ -161,13 +165,20 @@ public class StudentController {
     public void getStudentDetailByRollNo() {
         System.out.println("Enter the RollNo of Student");
         int rollNo = scanner.nextInt();
-        Student student = studentService.getStudentDetailByRollNo(rollNo);
+        Student student = null;
+        try {
+            student = studentService.getStudentDetailByRollNo(rollNo);
+        }catch(Exception e){
+            logger.error("Unable get student detail with rollNo {}", rollNo);
+            e.printStackTrace();
+        }
         if(student == null) {
             System.out.println("No student enrolled by this rollNo " + rollNo);
         } else {
             int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
+            logger.info("Student detail retrieved successfully whose rollNo {}", student.getRollNo());
             System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
-            System.out.println("\t\t\tSection: " + student.getGrade().getStandard());
+            System.out.println("\t\t\tSection: " + student.getGrade().getSection());
             System.out.println(student);
             System.out.println("\t\tStudent Age: "+age);
         }
@@ -184,8 +195,15 @@ public class StudentController {
     public void getRollNoToRemove() {
         System.out.println("Enter the RollNo of the student");
         int rollNo = scanner.nextInt();
+        boolean isRemoved = false;
+        try {
+            isRemoved = studentService.removeStudentByRollNo(rollNo);
+        }catch (Exception e){
+            logger.error("Unable to remove the student detail with rollNo {}", rollNo);
+            e.printStackTrace();
+        }
         if(studentService.removeStudentByRollNo(rollNo)) {
-            System.out.println("Student detail removed successfully..");
+            logger.info("Student detail successfully removed whose rollNo {}", rollNo);
         }
     }
 
@@ -224,6 +242,15 @@ public class StudentController {
             clubIds[i] = scanner.nextInt();
         }
         Student student = studentService.getStudentDetailByRollNo(rollNo);
-        studentService.assignStudentToClub(student, clubIds);
+        boolean isAssigned =false;
+        try {
+            isAssigned = studentService.assignStudentToClub(student, clubIds);
+        }catch(Exception e){
+            logger.error("Unable to assign student to club whose rollNo {}", student.getRollNo() );
+            e.printStackTrace();
+        }
+        if(studentService.assignStudentToClub(student, clubIds)){
+            logger.info("Student successfully added to club whose rollNo {}", student.getRollNo());
+        }
     }
 }

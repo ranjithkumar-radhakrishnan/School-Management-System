@@ -30,7 +30,6 @@ public class Main {
                                "Enter 8 to exit");
 
             int option = scanner.nextInt();
-            try {
                 switch(option) {
              
                     case 1:
@@ -66,11 +65,6 @@ public class Main {
                         break;
                     
                 }
-            } catch(Exception e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-            }
-
         }
     }
 }

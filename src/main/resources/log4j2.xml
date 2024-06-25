@@ -1,0 +1,23 @@
+<Configuration status = "WARN">
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout pattern="%d - %C [%M] - (%p) %m %n"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="C:\log\studentManagement.log" filePattern="application_log-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout>
+                <Pattern>%d - %C [%M] - (%p) %m %n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
