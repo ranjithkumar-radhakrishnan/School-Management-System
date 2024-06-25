@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82a0c6f1-a846-4b44-932f-930960f986ba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/i2i/sms/controller/ClubController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/i2i/sms/controller/ClubController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/i2i/sms/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/i2i/sms/controller/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/i2i/sms/dao/GradeDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/i2i/sms/dao/GradeDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/i2i/sms/dao/StudentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/i2i/sms/dao/StudentDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/i2i/sms/helper/HibernateConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/i2i/sms/helper/HibernateConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/i2i/sms/service/StudentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/i2i/sms/service/StudentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +35,7 @@
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;SMS-Annotation&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;SMS-Maven&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/my-maven-project&quot;
   }
