@@ -83,7 +83,6 @@ public class StudentService {
     public Student getStudentDetailByRollNo(int rollNo) {
         return studentDao.retrieveStudentDetailByRollNo(rollNo);
     }
-    
 
    /**
     *
