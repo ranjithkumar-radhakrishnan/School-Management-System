@@ -2,16 +2,19 @@ package com.i2i.sms.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.i2i.sms.dao.ClubDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.i2i.sms.dao.StudentDao;
+import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.model.Address;
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Grade;
 import com.i2i.sms.model.Student;
+
 /**
 *
 *This class implemented to store, collect, search and remove the student details.
@@ -22,7 +25,7 @@ public class StudentService {
     private StudentDao studentDao = new StudentDao();
     private GradeService gradeService = new GradeService();
     private ClubService clubService = new ClubService();
-
+    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
    /**
     * <p>
     * Creates student detail by getting their information.
@@ -40,10 +43,12 @@ public class StudentService {
     public boolean createStudentDetail(int standard, char section, Student student) {
         Grade gradeWithStandard = gradeService.getGradeWithStandardAndSection(standard, section);
         if (null == gradeWithStandard) {
+            logger.info("No grade available with standard {}", standard);
             Grade grade = gradeService.createGrade(standard, section);
             student.setGrade(grade);
             return studentDao.createStudentDetail(student);
         } else {
+            logger.info("Grade already available with standard {}", standard);
             student.setGrade(gradeWithStandard);
             if (studentDao.createStudentDetail(student)) {
                 return gradeService.updateCountOfGrade(gradeWithStandard.getGradeId(), false);
@@ -94,15 +99,20 @@ public class StudentService {
     public boolean removeStudentByRollNo(int rollNo) {
         List<Integer> clubIds = new ArrayList<>();
         Student student = studentDao.retrieveStudentDetailByRollNo(rollNo);
-        int gradeId = student.getGrade().getGradeId();
-        student.getClubs().forEach(club -> clubIds.add(club.getId()));
+        if(student != null) {
+            int gradeId = student.getGrade().getGradeId();
+            student.getClubs().forEach(club -> clubIds.add(club.getId()));
 
-        if (studentDao.deleteStudentByRollNo(rollNo)) {
-            for(Integer clubId : clubIds) {
-                clubService.updateCountOfClub(clubId, true);
+            if (studentDao.deleteStudentByRollNo(rollNo)) {
+                for (Integer clubId : clubIds) {
+                    clubService.updateCountOfClub(clubId, true);
+                }
+                return gradeService.updateCountOfGrade(gradeId, true);
+            } else {
+                return false;
             }
-            return gradeService.updateCountOfGrade(gradeId, true);
-        } else {
+        }else {
+            logger.warn("No student enrolled with this rollNo {}", rollNo);
             return false;
         }
     }

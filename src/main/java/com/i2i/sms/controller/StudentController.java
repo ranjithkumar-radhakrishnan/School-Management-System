@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.i2i.sms.model.Student;
 import com.i2i.sms.service.StudentService;
 import com.i2i.sms.utils.CommonUtil;
 import com.i2i.sms.utils.DateUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
 * Implementation to handle student, grade and their address.
@@ -114,16 +116,14 @@ public class StudentController {
                                             if (CommonUtil.isValidNumber(pin)) {
                                                 int pincode = Integer.parseInt(pin);
                                                 Student student = studentService.createStudent(name, mark, dob, doorNo, street, city, state, pincode);
-                                                boolean isAdded = false;
                                                 try {
-                                                    isAdded = studentService.createStudentDetail(standard, section, student);
+                                                    if(studentService.createStudentDetail(standard, section, student)){
+                                                        System.out.println("Student detail added successfully whose rollNo " + student.getRollNo());
+                                                    }
                                                 } catch(Exception e) {
                                                     logger.error("Unable to add student with rollNo {}", student.getRollNo());
                                                     e.printStackTrace();
                                                 }
-                                                if (isAdded) {
-                                                    logger.info("Student detail successfully added whose rollNo {}", student.getRollNo());
-                                                } 
                                                 isValid = false;
                                             } else {
                                                 System.out.println("Enter the pincode in correct format..");
@@ -165,45 +165,44 @@ public class StudentController {
     public void getStudentDetailByRollNo() {
         System.out.println("Enter the RollNo of Student");
         int rollNo = scanner.nextInt();
-        Student student = null;
         try {
-            student = studentService.getStudentDetailByRollNo(rollNo);
+            Student student  = studentService.getStudentDetailByRollNo(rollNo);
+            if(student == null) {
+                logger.warn("No student enrolled by this rollNo {}", rollNo);
+            } else {
+                int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
+                System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
+                System.out.println("\t\t\tSection: " + student.getGrade().getSection());
+                System.out.println(student);
+                System.out.println("\t\tStudent Age: "+age);
+                logger.info("Student detail retrieved successfully whose rollNo {}", student.getRollNo());
+            }
         }catch(Exception e){
-            logger.error("Unable get student detail with rollNo {}", rollNo);
+            logger.error("Unable to get student detail with rollNo {}", rollNo);
             e.printStackTrace();
         }
-        if(student == null) {
-            System.out.println("No student enrolled by this rollNo " + rollNo);
-        } else {
-            int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
-            logger.info("Student detail retrieved successfully whose rollNo {}", student.getRollNo());
-            System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
-            System.out.println("\t\t\tSection: " + student.getGrade().getSection());
-            System.out.println(student);
-            System.out.println("\t\tStudent Age: "+age);
-        }
     }
-
 
    /**
     * <p>
     * Get the rollNo of student to remove them.
     * </p>
     *
-    * @throws StudentException if rollNo of student not exist.
     */
     public void getRollNoToRemove() {
         System.out.println("Enter the RollNo of the student");
         int rollNo = scanner.nextInt();
-        boolean isRemoved = false;
+
         try {
-            isRemoved = studentService.removeStudentByRollNo(rollNo);
+            boolean isRemoved = studentService.removeStudentByRollNo(rollNo);
+            if(isRemoved) {
+                System.out.println("Student detail successfully removed whose rollNo " + rollNo);
+            }else {
+                System.out.println("Unable to remove the student detail with rollNo " + rollNo);
+            }
         }catch (Exception e){
             logger.error("Unable to remove the student detail with rollNo {}", rollNo);
             e.printStackTrace();
-        }
-        if(studentService.removeStudentByRollNo(rollNo)) {
-            logger.info("Student detail successfully removed whose rollNo {}", rollNo);
         }
     }
 
@@ -214,13 +213,24 @@ public class StudentController {
     *
     */
     public void printAllStudentsInformation() {
-        List<Student> allStudents = studentService.showAllStudentDetails();
-        for(Student student : allStudents) {
-            int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
-            System.out.println("Grade: " + student.getGrade().getStandard());
-            System.out.println("Section: " + student.getGrade().getSection());
-            System.out.println(student);
-            System.out.println("\t\tStudent age: " + age);
+        try {
+            List<Student> allStudents = studentService.showAllStudentDetails();
+            if (allStudents.isEmpty()) {
+                logger.warn("No Students enrolled in the grade");
+                System.out.print("No Students enrolled in the grade");
+            } else {
+                for (Student student : allStudents) {
+                    int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
+                    System.out.println("Grade: " + student.getGrade().getStandard());
+                    System.out.println("Section: " + student.getGrade().getSection());
+                    System.out.println(student);
+                    System.out.println("\t\tStudent age: " + age);
+                }
+                logger.info("Student detail printed sucessfully");
+            }
+        }catch(Exception e){
+            logger.error("Unable display the student details");
+            e.printStackTrace();
         }
     }
 
@@ -242,15 +252,14 @@ public class StudentController {
             clubIds[i] = scanner.nextInt();
         }
         Student student = studentService.getStudentDetailByRollNo(rollNo);
-        boolean isAssigned =false;
         try {
-            isAssigned = studentService.assignStudentToClub(student, clubIds);
+            boolean isAssigned = studentService.assignStudentToClub(student, clubIds);
+            if(isAssigned){
+                System.out.println("Student successfully added to club whose rollNo " + student.getRollNo());
+            }
         }catch(Exception e){
             logger.error("Unable to assign student to club whose rollNo {}", student.getRollNo() );
             e.printStackTrace();
-        }
-        if(studentService.assignStudentToClub(student, clubIds)){
-            logger.info("Student successfully added to club whose rollNo {}", student.getRollNo());
         }
     }
 }

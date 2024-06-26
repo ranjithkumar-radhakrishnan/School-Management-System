@@ -1,11 +1,14 @@
 package com.i2i.sms.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.i2i.sms.dao.ClubDao;
+import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
 
@@ -17,7 +20,7 @@ import com.i2i.sms.model.Student;
 public class ClubService {
 
     private ClubDao clubDao = new ClubDao();
-
+    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
    /**
     * <p>
     * Add the club detail which contains club Id, clubName, president, website, count.
@@ -45,20 +48,6 @@ public class ClubService {
 
    /**
     * <p>
-    * It gets club if it already exist
-    * </p>
-    *
-    * @param clubName
-    *        Name of the club.
-    * @throws StudentException if unable get the club.
-    * @return Club if it already exist or else null 
-    */
-    public Club getClubIfAlreadyExist(String clubName) {
-        return clubDao.getClubIfAlreadyExist(clubName);
-    }
-
-   /**
-    * <p>
     * It gets all the clubs.
     * </p>
     *
@@ -67,7 +56,6 @@ public class ClubService {
     public List<Club> getAllClubs() {
         return clubDao.fetchAllClubs();
     }
-
 
    /**
     * <p>
@@ -97,6 +85,7 @@ public class ClubService {
             Club club = clubDao.getClubById(clubIds[i]);
             clubs.add(club);
         }
+        logger.info("Get all the clubs that student going to enroll");
         return clubs;
     }
 
@@ -108,7 +97,7 @@ public class ClubService {
     *
     * @param clubId
     *        Club Id of the grade passed that we want to update the count.
-    * @param update
+    * @param isIncrement
     *        It increases grade count by 1 if pass 1.
     *        It decreases grade count by 1 if pass 0.
     * @throws StudentException if unable to update the count of the club.

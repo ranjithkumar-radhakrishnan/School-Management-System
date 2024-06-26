@@ -1,6 +1,12 @@
 package com.i2i.sms.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.OneToOne;
 
 /**
 * This class represents a address of the student which contains information such as address Id, doorNo, street, city, state, pincode.

@@ -13,11 +13,17 @@
             <DefaultRolloverStrategy max="5"/>
         </RollingFile>
     </Appenders>
+
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
         </Root>
+
+        <Logger name="org.hibernate" level="off" additivity="false">
+            <AppenderRef ref="ApplicationConsole"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
     </Loggers>
 </Configuration>
 

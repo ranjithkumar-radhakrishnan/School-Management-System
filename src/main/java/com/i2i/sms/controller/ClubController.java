@@ -1,18 +1,16 @@
 package com.i2i.sms.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
 import com.i2i.sms.service.ClubService;
-import com.i2i.sms.service.StudentService;
 import com.i2i.sms.utils.DateUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
 * Implementation to handle club details.
@@ -20,7 +18,6 @@ import org.slf4j.LoggerFactory;
 public class ClubController {
 
     private Scanner scanner = new Scanner(System.in);
-    private StudentService studentService = new StudentService();
     private ClubService clubService = new ClubService();
     private static final Logger logger = LoggerFactory.getLogger(ClubController.class);
    /**
@@ -83,16 +80,15 @@ public class ClubController {
         String website = scanner.next();
         System.out.println("Enter the club Count: ");
         int count = scanner.nextInt();
-        boolean isAdded = false;
         try {
-            isAdded = clubService.addClubDetail(clubName, president, website, count);
+            boolean isAdded = clubService.addClubDetail(clubName, president, website, count);
+            if(isAdded) {
+                System.out.println("Club detail added successfully");
+            }
         }catch(Exception e){
             logger.error("Unable to add the club detail whose clubName {}", clubName);
             e.printStackTrace();
         }
-        if(isAdded) {
-            logger.info("Club detail added successfully whose clubName {}", clubName);
-        }          
      }
 
     /**
@@ -105,13 +101,25 @@ public class ClubController {
        clubs.forEach(club -> System.out.println(club.getId() + "-" +club.getName()));
        System.out.println("Enter the club id");
        int clubId = scanner.nextInt();
-       Set<Student> students = clubService.showAllStudentsOfClub(clubId);
-       for(Student student : students) {
-           int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
-           System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
-           System.out.println("\t\t\tSection: " + student.getGrade().getSection());
-           System.out.println(student);
-           System.out.println("\t\tStudent age: " + age);
+       try {
+           Set<Student> students = clubService.showAllStudentsOfClub(clubId);
+           if(!students.isEmpty()) {
+               for (Student student : students) {
+                   int age = DateUtil.getDifferenceBetweenDateByYears(student.getDob(), null);
+                   System.out.println("\t\t\tGrade: " + student.getGrade().getStandard());
+                   System.out.println("\t\t\tSection: " + student.getGrade().getSection());
+                   System.out.println(student);
+                   System.out.println("\t\tStudent age: " + age);
+               }
+               logger.info("Displayed all the students of club of Id {}", clubId);
+               System.out.println("Displayed all the students of club of Id " + clubId);
+           }else{
+               logger.warn("No students enrolled in this club of Id {}", clubId);
+               System.out.println("No students enrolled in this club of Id " + clubId);
+           }
+       }catch(Exception e){
+           logger.error("Unable to display the students of club with id {}", clubId);
+           e.printStackTrace();
        }
     }
 }

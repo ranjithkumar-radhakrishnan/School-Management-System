@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.hibernate.query.Query; 
 import org.hibernate.Session;
-import org.hibernate.Transaction; 
+import org.hibernate.Transaction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Student;
-
 
 /**
 *
@@ -18,6 +20,7 @@ import com.i2i.sms.model.Student;
 */
 public class StudentDao {
 
+    private static final Logger logger = LoggerFactory.getLogger(StudentDao.class);
    /**
     * <p>
     * Adds the student detail.
@@ -34,6 +37,7 @@ public class StudentDao {
             transaction = session.beginTransaction();
             session.save(student);
             transaction.commit();
+            logger.info("Student successfully added whose rollNo {}", student.getRollNo());
             return true;
         } catch (Exception e) { 
             if (null != transaction ) {
@@ -58,7 +62,8 @@ public class StudentDao {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
             transaction = session.beginTransaction(); 
             session.saveOrUpdate(student);
-            transaction.commit(); 
+            transaction.commit();
+            logger.info("Student assigned to club successfully");
             return true;
         } catch (Exception e) { 
             if(transaction != null || transaction.isActive()) {
@@ -115,26 +120,23 @@ public class StudentDao {
     * @param rollNo
     *        RollNo of student as Integer.
     * @throws StudentException if rollNo of student not exist.
-    * @return Boolean value as true if the student detail gets removed or else false
+    * @return Boolean value as true if the student detail gets removed
     */
     public boolean deleteStudentByRollNo(int rollNo) {
         Transaction transaction = null;
         Student student = null;
-        boolean isDelete = false;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
             transaction = session.beginTransaction(); 
             student = session.get(Student.class, rollNo);
-            if (null != student) {
-                session.delete(student);
-                transaction.commit();
-                isDelete = true;
-            }
+            session.delete(student);
+            transaction.commit();
+            logger.info("Student detail successfully removed whose rollNo {}", rollNo);
+            return true;
         } catch (Exception e) { 
             if (transaction != null || transaction.isActive()) {
                 transaction.rollback();
             }
             throw new StudentException("Unable to delete the student with rollNo " + rollNo, e);
-        } 
-        return isDelete;
+        }
     }
 }

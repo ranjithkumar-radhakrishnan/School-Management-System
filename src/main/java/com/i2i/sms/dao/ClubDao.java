@@ -1,15 +1,14 @@
 package com.i2i.sms.dao;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.cfg.Configuration; 
 import org.hibernate.query.Query;
-import org.hibernate.Session; 
-import org.hibernate.SessionFactory; 
-import org.hibernate.Transaction; 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
@@ -22,7 +21,8 @@ import com.i2i.sms.model.Student;
 *
 */
 public class ClubDao {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(ClubDao.class);
    /**
     * <p>
     * Add the club details.
@@ -38,7 +38,8 @@ public class ClubDao {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
             transaction = session.beginTransaction(); 
             session.save(club);
-            transaction.commit(); 
+            transaction.commit();
+            logger.info("Club added successfully of club Id {}", club.getId());
             return true;
         } catch (Exception e) { 
             if (transaction != null || transaction.isActive()) {
@@ -102,8 +103,7 @@ public class ClubDao {
     * @return Set of students which contains the information such as roll No, name, mark, dob if students present
               Or else null
     */
-    public Set<Student> displayAllStudentsOfClub(int clubId) { 
-        List<Student> students = null;
+    public Set<Student> displayAllStudentsOfClub(int clubId) {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
             Club club = session.get(Club.class, clubId);
             return club.getStudents();
@@ -120,7 +120,7 @@ public class ClubDao {
     *
     * @param clubId
     *        Club Id of the grade passed that we want to update the count.
-    * @param update
+    * @param isIncrement
     *        It increases grade count by 1 if pass 1.
     *        It decreases grade count by 1 if pass 0.
     * @throws StudentException if unable to update the count of the club.
@@ -142,6 +142,7 @@ public class ClubDao {
             }
             session.update(club);         
             transaction.commit();
+            logger.info("Update the club count whose club Id {} ", clubId);
             return true;
         } catch (Exception e) { 
             if(transaction != null || transaction.isActive()) {

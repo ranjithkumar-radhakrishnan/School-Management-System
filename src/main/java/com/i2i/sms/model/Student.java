@@ -1,15 +1,27 @@
 package com.i2i.sms.model;
 
-import jakarta.persistence.*;
-
 import java.util.Set;
 import java.util.Date;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 /**
 *This class represents a student which contains their information such as Id, name, date of birth, age and their grade Id.
 */
 @Entity
-@Table(name = "student")
+@Table (name = "student")
 public class Student {
 
     @Id

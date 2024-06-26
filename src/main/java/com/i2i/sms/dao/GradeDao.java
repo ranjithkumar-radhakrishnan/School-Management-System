@@ -1,15 +1,15 @@
 package com.i2i.sms.dao;
 
-import com.i2i.sms.controller.StudentController;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction; 
+import org.hibernate.Transaction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Grade;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
 *
@@ -98,7 +98,7 @@ public class GradeDao {
             transaction = session.beginTransaction();
             session.save(grade);
             transaction.commit();
-            logger.info("Insert the grade with Id{}", grade.getGradeId());
+            logger.info("Insert the grade with Id {}", grade.getGradeId());
             return grade;
         } catch (Exception e) {
             if (null != transaction ) {
@@ -107,4 +107,5 @@ public class GradeDao {
             throw new StudentException("Unable to add the grade with standard " + grade.getStandard(), e);
         }
     }
+
 }
