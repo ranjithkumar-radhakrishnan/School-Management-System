@@ -3,17 +3,23 @@ package com.i2i.sms.service;
 import com.i2i.sms.dao.GradeDao;
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.model.Grade;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
 *
 * Class implemented to store, retrieve and update the grade details.
 * 
 */
-
+@Service
+@Component
 public class GradeService {
-
-    private GradeDao gradeDao = new GradeDao();
-    
+    @Autowired
+    private GradeDao gradeDao;
+    private static final Logger logger = LogManager.getLogger(GradeService.class);
    /**
     * <p>
     * Get the grade detail with given standard and section.
@@ -65,6 +71,7 @@ public class GradeService {
         grade.setStandard(standard);
         grade.setSection(section);
         grade.setSectionCount(grade.getSectionCount()-1);
+        logger.debug("New grade created with standard {} {}", standard, section);
         return gradeDao.insertGrade(grade);
     }
 }

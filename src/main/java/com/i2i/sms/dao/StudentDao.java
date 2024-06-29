@@ -6,21 +6,25 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Student;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
 *
 * Class implemented to store, retrieve, search and remove the student details.
 *
 */
+@Repository
+@Component
 public class StudentDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(StudentDao.class);
+    private static final Logger logger = LogManager.getLogger(StudentDao.class);
    /**
     * <p>
     * Adds the student detail.
@@ -43,7 +47,7 @@ public class StudentDao {
             if (null != transaction ) {
                transaction.rollback();
             }
-            throw new StudentException("Unable to add the student detail with rollNo " + student.getRollNo(), e);
+            throw new StudentException("Unable to add the student detail", e);
         }         
     }
 
@@ -106,6 +110,7 @@ public class StudentDao {
         Student student = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) { 
             student = session.get(Student.class, rollNo);
+            logger.debug("Student detail retrieved if enrolled or else null {}", student);
             return student;
         } catch (Exception e) { 
             throw new StudentException("Unable to show student detail with RollNo " + rollNo, e);

@@ -4,22 +4,28 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
 import com.i2i.sms.service.ClubService;
 import com.i2i.sms.utils.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 /**
 * Implementation to handle club details.
 */
+@Controller
+@Component
 public class ClubController {
 
     private Scanner scanner = new Scanner(System.in);
-    private ClubService clubService = new ClubService();
-    private static final Logger logger = LoggerFactory.getLogger(ClubController.class);
+    @Autowired
+    private ClubService clubService;
+    private static final Logger logger = LogManager.getLogger(ClubController.class);
    /**
     * <p>
     * Get the clubName from student to them into particular club.
@@ -86,8 +92,7 @@ public class ClubController {
                 System.out.println("Club detail added successfully");
             }
         }catch(Exception e){
-            logger.error("Unable to add the club detail whose clubName {}", clubName);
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
      }
 
@@ -118,8 +123,7 @@ public class ClubController {
                System.out.println("No students enrolled in this club of Id " + clubId);
            }
        }catch(Exception e){
-           logger.error("Unable to display the students of club with id {}", clubId);
-           e.printStackTrace();
+           logger.error(e.getMessage());
        }
     }
 }

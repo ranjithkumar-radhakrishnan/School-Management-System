@@ -4,23 +4,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.dao.ClubDao;
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
 *
 *This class implemented to store, collect, search and remove the club details.
 *
 */
+@Service
+@Component
 public class ClubService {
-
-    private ClubDao clubDao = new ClubDao();
-    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
+    @Autowired
+    private ClubDao clubDao;
+    private static final Logger logger = LogManager.getLogger(StudentService.class);
    /**
     * <p>
     * Add the club detail which contains club Id, clubName, president, website, count.

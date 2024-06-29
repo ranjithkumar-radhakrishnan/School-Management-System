@@ -5,22 +5,28 @@ import java.util.List;
 import java.util.Scanner;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.model.Student;
 import com.i2i.sms.service.StudentService;
 import com.i2i.sms.utils.CommonUtil;
 import com.i2i.sms.utils.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 /**
 * Implementation to handle student, grade and their address.
 */
+@Controller
+@Component
 public class StudentController {
     
     private Scanner scanner = new Scanner(System.in);
-    private StudentService studentService = new StudentService();
-    private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
+    @Autowired
+    private StudentService studentService;
+    private static final Logger logger = LogManager.getLogger(StudentController.class);
    /**
     * <p>
     * Get all the student detail such as name, mark, dob, standard, section and their address.
@@ -121,8 +127,7 @@ public class StudentController {
                                                         System.out.println("Student detail added successfully whose rollNo " + student.getRollNo());
                                                     }
                                                 } catch(Exception e) {
-                                                    logger.error("Unable to add student with rollNo {}", student.getRollNo());
-                                                    e.printStackTrace();
+                                                    logger.error(e.getMessage());
                                                 }
                                                 isValid = false;
                                             } else {
@@ -178,8 +183,7 @@ public class StudentController {
                 logger.info("Student detail retrieved successfully whose rollNo {}", student.getRollNo());
             }
         }catch(Exception e){
-            logger.error("Unable to get student detail with rollNo {}", rollNo);
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -201,8 +205,7 @@ public class StudentController {
                 System.out.println("Unable to remove the student detail with rollNo " + rollNo);
             }
         }catch (Exception e){
-            logger.error("Unable to remove the student detail with rollNo {}", rollNo);
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -229,8 +232,7 @@ public class StudentController {
                 logger.info("Student detail printed sucessfully");
             }
         }catch(Exception e){
-            logger.error("Unable display the student details");
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -258,8 +260,7 @@ public class StudentController {
                 System.out.println("Student successfully added to club whose rollNo " + student.getRollNo());
             }
         }catch(Exception e){
-            logger.error("Unable to assign student to club whose rollNo {}", student.getRollNo() );
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 }

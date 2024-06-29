@@ -2,7 +2,10 @@
 package com.i2i.sms.helper;
 
 
+import com.i2i.sms.service.GradeService;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -13,6 +16,7 @@ import org.hibernate.cfg.Configuration;
 public class HibernateConnection{
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
+    private static final Logger logger = LogManager.getLogger(HibernateConnection.class);
     
     //It creates the sessionFactory instance
     private static SessionFactory buildSessionFactory() {

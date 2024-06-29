@@ -4,21 +4,25 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Grade;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
 *
 * Class implemented to store, retrieve and update the grade details.
 * 
 */
+@Repository
+@Component
 public class GradeDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(GradeDao.class);
+    private static final Logger logger = LogManager.getLogger(GradeDao.class);
    /**
     * <p>
     * Get the grade with the given standard and section
@@ -38,6 +42,7 @@ public class GradeDao {
             query.setParameter("standard", standard);
             query.setParameter("section", section);
             grade = (Grade) query.uniqueResult();
+            logger.debug("Get the grade if exist or else null {}", grade);
             return grade;
         } catch (Exception e) {
             throw new StudentException("Unable to get grade with standard " + standard + " and section" + section, e);
@@ -65,10 +70,13 @@ public class GradeDao {
             Grade grade = session.get(Grade.class, gradeId);  
            
             if (isIncrement == true) {
-                grade.setSectionCount(grade.getSectionCount()+1);  
+                grade.setSectionCount(grade.getSectionCount()+1);
+                logger.debug("Grade section Count Increased by one, Section count = {} where grade Id = {}", grade.getSectionCount(), gradeId);
             } else if (isIncrement == false) {
                 grade.setSectionCount(grade.getSectionCount()-1);
+                logger.debug("Grade section Count decreased by one, Section count = {} where grade Id = {}", grade.getSectionCount(), gradeId);
             } else {
+                logger.debug("Illegal argument passed for isIncrement {}", isIncrement);
                 return false;
             }
             session.update(grade);         

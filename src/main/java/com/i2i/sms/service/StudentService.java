@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.dao.StudentDao;
 import com.i2i.sms.exception.StudentException;
@@ -14,18 +14,25 @@ import com.i2i.sms.model.Address;
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Grade;
 import com.i2i.sms.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
 *
 *This class implemented to store, collect, search and remove the student details.
 *
 */
+@Service
+@Component
 public class StudentService {
-    
-    private StudentDao studentDao = new StudentDao();
-    private GradeService gradeService = new GradeService();
-    private ClubService clubService = new ClubService();
-    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
+    @Autowired
+    private StudentDao studentDao;
+    @Autowired
+    private GradeService gradeService;
+    @Autowired
+    private ClubService clubService;
+    private static final Logger logger = LogManager.getLogger(StudentService.class);
    /**
     * <p>
     * Creates student detail by getting their information.
@@ -51,6 +58,7 @@ public class StudentService {
             logger.info("Grade already available with standard {}", standard);
             student.setGrade(gradeWithStandard);
             if (studentDao.createStudentDetail(student)) {
+                logger.debug("Student detail created successfully {}", student);
                 return gradeService.updateCountOfGrade(gradeWithStandard.getGradeId(), false);
             } else {
                 return false;
@@ -103,6 +111,7 @@ public class StudentService {
             student.getClubs().forEach(club -> clubIds.add(club.getId()));
 
             if (studentDao.deleteStudentByRollNo(rollNo)) {
+                logger.debug("Student detail removed successfully whose rollNo {}", rollNo);
                 for (Integer clubId : clubIds) {
                     clubService.updateCountOfClub(clubId, true);
                 }
@@ -153,6 +162,8 @@ public class StudentService {
         address.setState(state);
         address.setPincode(pincode);
         student.setAddress(address);
+
+        logger.debug("Address associated with student");
         return student;
     }
 

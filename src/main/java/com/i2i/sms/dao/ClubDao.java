@@ -7,22 +7,26 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.HibernateConnection;
 import com.i2i.sms.model.Club;
 import com.i2i.sms.model.Student;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
 *
 *This class implemented to store, collect, search and remove the club details.
 *
 */
+@Repository
+@Component
 public class ClubDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClubDao.class);
+    private static final Logger logger = LogManager.getLogger(ClubDao.class);
    /**
     * <p>
     * Add the club details.
@@ -135,9 +139,12 @@ public class ClubDao {
            
             if (isIncrement == true) {
                 club.setCount(club.getCount() + 1);
+                logger.debug("Club Count Increased by one, count = {} where club Id = {}", club.getCount(), club.getId());
             } else if (isIncrement == false) {
-                club.setCount(club.getCount() - 1);  
+                club.setCount(club.getCount() - 1);
+                logger.debug("Club Count decreased by one, count = {} where club Id = {}", club.getCount(), club.getId());
             } else {
+                logger.debug("Illegal argument passed for isIncrement {}", isIncrement);
                 return false;
             }
             session.update(club);         

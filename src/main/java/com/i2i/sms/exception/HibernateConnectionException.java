@@ -8,9 +8,7 @@ import java.lang.Exception;
 * 
 */
 public class HibernateConnectionException extends RuntimeException {
-     
     public HibernateConnectionException(String message, Throwable e) {
         super(message, e);
     }
-  
 }
