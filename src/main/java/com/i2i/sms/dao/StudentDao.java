@@ -21,7 +21,6 @@ import org.springframework.stereotype.Repository;
 *
 */
 @Repository
-@Component
 public class StudentDao {
 
     private static final Logger logger = LogManager.getLogger(StudentDao.class);

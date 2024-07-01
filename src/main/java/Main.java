@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.i2i.sms.controller.ClubController;
 import com.i2i.sms.controller.StudentController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -21,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 
-        Main main = new Main();
+        Main main = context.getBean(Main.class);
         main.startApplication(context);
     }
 

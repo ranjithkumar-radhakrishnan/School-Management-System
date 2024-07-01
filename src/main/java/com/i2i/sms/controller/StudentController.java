@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 * Implementation to handle student, grade and their address.
 */
 @Controller
-@Component
 public class StudentController {
     
     private Scanner scanner = new Scanner(System.in);

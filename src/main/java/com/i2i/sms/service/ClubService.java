@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 *
 */
 @Service
-@Component
 public class ClubService {
     @Autowired
     private ClubDao clubDao;

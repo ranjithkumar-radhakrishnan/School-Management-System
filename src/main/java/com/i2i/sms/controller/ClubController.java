@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 * Implementation to handle club details.
 */
 @Controller
-@Component
 public class ClubController {
 
     private Scanner scanner = new Scanner(System.in);

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Repository;
 *
 */
 @Repository
-@Component
 public class ClubDao {
 
     private static final Logger logger = LogManager.getLogger(ClubDao.class);
