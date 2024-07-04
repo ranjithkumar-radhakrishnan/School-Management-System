@@ -2,6 +2,7 @@ package com.i2i.sms.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,6 +37,7 @@ public class Club {
     private int count;
 
     @ManyToMany(mappedBy = "clubs", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Student> students;
 
     public void setId(int id) {

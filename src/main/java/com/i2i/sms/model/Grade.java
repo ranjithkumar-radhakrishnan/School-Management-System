@@ -2,6 +2,7 @@ package com.i2i.sms.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,9 +27,10 @@ public class Grade {
     private Character section;
 
     @Column(name = "section_count")
-    private int sectionCount = 3;
+    private int sectionCount;
 
     @OneToMany(mappedBy = "grade", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Student> students;
 
     public void setGradeId(int gradeId) {

@@ -1,76 +1,14 @@
 package com.i2i.sms.service;
 
-import com.i2i.sms.dao.GradeDao;
-import com.i2i.sms.exception.StudentException;
+import java.util.Set;
+
+import com.i2i.sms.dto.StudentGradeResponseDto;
 import com.i2i.sms.model.Grade;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
-*
-* Class implemented to store, retrieve and update the grade details.
-* 
-*/
-@Service
-public class GradeService {
-    @Autowired
-    private GradeDao gradeDao;
-    private static final Logger logger = LogManager.getLogger(GradeService.class);
-   /**
-    * <p>
-    * Get the grade detail with given standard and section.
-    * </p>
-    *
-    * @param standard
-    *        grade of student as int.
-    * @param section
-    *        section of student as character
-    * @throws StudentException if the grade not found with given standard and section.
-    * @return Grade detail if present or else null
-    */
-    public Grade getGradeWithStandardAndSection(int standard, char section) {
-        return gradeDao.getGradeWithStandardAndSection(standard, section);
-    }
-
-   /**
-    * <p>
-    * Updates the grade count, either increased by one or decreased by one
-    * </p>
-    *
-    * @param gradeId
-    *        Grade Id of the grade passed that we want to update the count.
-    * @param isIncrement
-    *        It increases grade count by 1 if we pass boolean as true.
-    *        It decreases grade count by 1 if we pass boolean as false.
-    * @throws StudentException if unable to update the count of the grade.
-    * @return Boolean value as true if it updates the count or else false
-    *         Boolean value as false if we pass second parameter other than true or false
-    */
-    public boolean updateCountOfGrade(int gradeId, boolean isIncrement) {
-        return gradeDao.updateGradeCount(gradeId, isIncrement);
-    }
-
-    /**
-     * <p>
-     * Creates the grade with standard and section.
-     * </p>
-     *
-     * @param standard
-     *        Grade of the student passed as Integer.
-     * @param section
-     *        Section of the student passed as Character.
-     * @throws StudentException if unable to create the grade.
-     * @return Grade which contains standard and section
-     */
-    public Grade createGrade(int standard, char section) {
-        Grade grade = new Grade();
-        grade.setStandard(standard);
-        grade.setSection(section);
-        grade.setSectionCount(grade.getSectionCount()-1);
-        logger.debug("New grade created with standard {} {}", standard, section);
-        return gradeDao.insertGrade(grade);
-    }
+ *This interface has declared methods which used to get, display the grade details
+ */
+public interface GradeService {
+    Set<StudentGradeResponseDto> getStudentsOfGrade(int gradeId);
+    Grade getGradeOfStandardAndSection(Grade grade);
 }

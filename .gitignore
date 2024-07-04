@@ -2,3 +2,7 @@
 .idea
 /target
 *.class
+
+# Ignore application properties
+src/main/resources/application.properties
+
