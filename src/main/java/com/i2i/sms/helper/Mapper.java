@@ -61,25 +61,33 @@ public class Mapper {
 
     /**
      * <p>
-     * Converts the List of Student entity into list of StudentResponseDto
-     * StudentResponseDto contains only student, address, grade detail
+     * Converts the List of Student entity into list of studentGradeResponseDto
+     * studentGradeResponseDto contains only student, address, grade detail
      * </p>
      */
-    public List<StudentResponseDto> covertStudentEntityToDto(List<Student> student){
-        return student.stream()
+    public List<StudentResponseDto> covertStudentEntityToDto(List<Student> students){
+        return students.stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
     }
 
     /**
      * <p>
-     * Converts the Student entity into StudentResponseDto
-     * StudentResponseDto contains only student, address, grade detail
+     * Converts the Student entity into studentGradeResponseDto
+     * studentGradeResponseDto contains only student, address, grade detail
      * </p>
      */
     public StudentResponseDto convertEntityToDto(Student student){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        StudentResponseDto studentResponseDto = modelMapper.map(student, StudentResponseDto.class);
+        GradeResponseDto gradeResponseDto = modelMapper.map(student.getGrade(), GradeResponseDto.class);
+        AddressResponseDto addressResponseDto = modelMapper.map(student.getAddress(), AddressResponseDto.class);
+        StudentResponseDto studentResponseDto = new StudentResponseDto();
+        studentResponseDto.setRollNo(student.getRollNo());
+        studentResponseDto.setName(student.getName());
+        studentResponseDto.setMark(student.getMark());
+        studentResponseDto.setDob(student.getDob());
+        studentResponseDto.setAddress(addressResponseDto);
+        studentResponseDto.setGrade(gradeResponseDto);
         return studentResponseDto;
     }
 
@@ -102,27 +110,33 @@ public class Mapper {
      */
     private StudentGradeResponseDto covertStudentOfGradeEntityToDto(Student student){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        StudentGradeResponseDto studentGradeResponseDto = modelMapper.map(student, StudentGradeResponseDto.class);
+        AddressResponseDto addressResponseDto= modelMapper.map(student.getAddress(), AddressResponseDto.class);
+        StudentGradeResponseDto studentGradeResponseDto = new StudentGradeResponseDto();
+        studentGradeResponseDto.setRollNo(student.getRollNo());
+        studentGradeResponseDto.setName(student.getName());
+        studentGradeResponseDto.setMark(student.getMark());
+        studentGradeResponseDto.setDob(student.getDob());
+        studentGradeResponseDto.setAddress(addressResponseDto);
         return studentGradeResponseDto;
     }
     /**
      * <p>
-     * Converts the list of Club entity into list of ClubRequestDto
+     * Converts the list of Club entity into list of ClubResponseDto
      * </p>
      */
-    public List<ClubRequestDto> convertClubEntityToDto(List<Club> clubs) {
+    public List<ClubResponseDto> convertClubEntityToDto(List<Club> clubs) {
         return clubs.stream()
                 .map(this::convertClubEntityToDto)
                 .collect(Collectors.toList());
     }
     /**
      * <p>
-     * Converts the Club entity into ClubRequestDto
+     * Converts the Club entity into ClubResponseDto
      * </p>
      */
-    public ClubRequestDto convertClubEntityToDto(Club club) {
+    public ClubResponseDto convertClubEntityToDto(Club club) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        ClubRequestDto clubRequestDto = modelMapper.map(club, ClubRequestDto.class);
-        return clubRequestDto;
+        ClubResponseDto clubResponseDto = modelMapper.map(club, ClubResponseDto.class);
+        return clubResponseDto;
     }
 }

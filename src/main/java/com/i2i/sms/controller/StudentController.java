@@ -59,7 +59,7 @@ public class StudentController {
          }catch (Exception e){
              logger.error(e.getMessage());
          }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
    /**
@@ -96,7 +96,7 @@ public class StudentController {
             return new ResponseEntity<>(studentResponseDtos, HttpStatus.OK);
         }else{
             logger.info("No Students enrolled yet");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
 

@@ -6,12 +6,9 @@ public class StudentGradeResponseDto {
     private int rollNo;
     private String name;
     private int mark;
+    private int age;
     private Date dob;
-    private String doorNo;
-    private String street;
-    private String city;
-    private String state;
-    private int pincode;
+    private AddressResponseDto address;
 
     public int getRollNo() {
         return rollNo;
@@ -45,43 +42,19 @@ public class StudentGradeResponseDto {
         this.dob = dob;
     }
 
-    public String getDoorNo() {
-        return doorNo;
+    public AddressResponseDto getAddress() {
+        return address;
     }
 
-    public void setDoorNo(String doorNo) {
-        this.doorNo = doorNo;
+    public void setAddress(AddressResponseDto address) {
+        this.address = address;
     }
 
-    public String getStreet() {
-        return street;
+    public int getAge() {
+        return age;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public int getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(int pincode) {
-        this.pincode = pincode;
+    public void setAge(int age) {
+        this.age = age;
     }
 }

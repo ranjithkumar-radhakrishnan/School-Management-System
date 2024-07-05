@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService{
                 studentRepo.save(student);
                 logger.info("Student successfully added whose rollNo {}", student.getRollNo());
             } else {
-                logger.debug("No grade available {}", studentRequestDto.getGrade());
+                logger.debug("No grade available, grade will be created {}", studentRequestDto.getGrade());
                 studentRepo.save(student);
                 logger.info("Student successfully added whose rollNo {}", student.getRollNo());
             }
@@ -91,7 +91,7 @@ public class StudentServiceImpl implements StudentService{
     */
     public StudentResponseDto getStudentDetailByRollNo(int rollNo) {
         Student student = studentRepo.findById(rollNo).orElseThrow(() -> new StudentException("No Student enrolled with id "+rollNo));
-        logger.debug("Student detail retrieved if enrolled or else throws exception {}", student);
+        logger.debug("Student detail retrieved successfully whose rollNo {}", rollNo);
         return  mapper.convertEntityToDto(student);
     }
 

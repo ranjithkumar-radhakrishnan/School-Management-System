@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.i2i.sms.dto.StudentGradeResponseDto;
 import com.i2i.sms.service.GradeService;
+import com.i2i.sms.utils.DateUtil;
 
 @RestController
 @RequestMapping("/sms/api/v1/grades")
@@ -33,6 +34,11 @@ public class GradeController {
     public ResponseEntity<Set<StudentGradeResponseDto>> getStudentsOfGrade(@PathVariable("gradeId") int gradeId){
         try {
             Set<StudentGradeResponseDto> studentGradeResponseDtos = gradeService.getStudentsOfGrade(gradeId);
+            studentGradeResponseDtos.forEach(studentGradeResponse -> {
+                int age = DateUtil.getDifferenceBetweenDateByYears(studentGradeResponse.getDob(), null);
+                logger.debug("Calculates the student age " + age + " by their DOB ");
+                studentGradeResponse.setAge(age);
+            });
             logger.info("Students retrieved successfully of grade Id {} ", gradeId);
             return new ResponseEntity<>(studentGradeResponseDtos, HttpStatus.OK);
         }catch(Exception e){

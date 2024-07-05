@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.i2i.sms.dto.ClubAssignStudentDto;
 import com.i2i.sms.dto.ClubRequestDto;
+import com.i2i.sms.dto.ClubResponseDto;
 import com.i2i.sms.dto.StudentResponseDto;
 import com.i2i.sms.model.Club;
 
@@ -13,7 +14,7 @@ import com.i2i.sms.model.Club;
  */
 public interface ClubService {
     void addClubDetail(ClubRequestDto clubRequestDto);
-    List<ClubRequestDto> getAllClubs();
+    List<ClubResponseDto> getAllClubs();
     List<StudentResponseDto> showAllStudentsOfClub(int clubId);
     Set<Club> getClubs(Set<ClubAssignStudentDto> clubAssignStudentDtoSet);
 }

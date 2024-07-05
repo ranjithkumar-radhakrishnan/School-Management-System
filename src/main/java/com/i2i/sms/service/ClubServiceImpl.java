@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.i2i.sms.dto.ClubResponseDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class ClubServiceImpl implements ClubService {
     *
     * @return List of ClubRequestDto which contains the club information or else null
     */
-    public List<ClubRequestDto> getAllClubs() {
+    public List<ClubResponseDto> getAllClubs() {
         if(!clubRepo.findAll().isEmpty()) {
             logger.debug("Club is not empty");
             return mapper.convertClubEntityToDto(clubRepo.findAll());
