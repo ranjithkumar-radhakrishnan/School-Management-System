@@ -31,7 +31,7 @@ public class StudentController {
     * Get all the student detail such as name, mark, dob, standard, section and their address.
     * </p>
     */
-    @PostMapping("/addStudent")
+    @PostMapping
     public ResponseEntity<HttpStatus> addStudentDetail(@RequestBody StudentRequestDto studentRequestDto) {
         try {
             studentService.createStudentDetail(studentRequestDto);
@@ -49,7 +49,7 @@ public class StudentController {
     * </p>
     *
     */
-    @GetMapping("/getStudent/{rollNo}")
+    @GetMapping("/{rollNo}")
     public ResponseEntity<StudentResponseDto> getStudentDetailByRollNo(@PathVariable("rollNo") int rollNo) {
          try {
              StudentResponseDto studentResponseDto = studentService.getStudentDetailByRollNo(rollNo);
@@ -67,7 +67,7 @@ public class StudentController {
     * Get the rollNo of student to remove them.
     * </p>
     */
-    @DeleteMapping("/removeStudent/{rollNo}")
+    @DeleteMapping("/{rollNo}")
     public ResponseEntity<HttpStatus> getRollNoToRemove(@PathVariable("rollNo") int rollNo) {
         try {
             studentService.removeStudentByRollNo(rollNo);
@@ -83,7 +83,7 @@ public class StudentController {
     * Display the students detail of all grade.
     * </p>
     */
-    @GetMapping("/getAllStudent")
+    @GetMapping
     public ResponseEntity<List<StudentResponseDto>> printAllStudentsInformation() {
         List<StudentResponseDto> studentResponseDtos = studentService.showAllStudentDetails();
         if(studentResponseDtos != null){

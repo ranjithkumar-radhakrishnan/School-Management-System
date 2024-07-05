@@ -28,7 +28,7 @@ public class ClubController {
      * It creates the Club
      * </p>
      */
-    @PostMapping("/addClub")
+    @PostMapping
     public ResponseEntity<HttpStatus> addClub(@RequestBody ClubRequestDto clubRequestDto){
         try {
             clubService.addClubDetail(clubRequestDto);
@@ -66,7 +66,7 @@ public class ClubController {
      * It gets all the clubs
      * </p>
      */
-    @GetMapping("/getAllClubs")
+    @GetMapping
     public ResponseEntity<List<ClubResponseDto>> getAllClubs(){
         List<ClubResponseDto> clubResponseDtos = clubService.getAllClubs();
         if(clubResponseDtos != null) {
