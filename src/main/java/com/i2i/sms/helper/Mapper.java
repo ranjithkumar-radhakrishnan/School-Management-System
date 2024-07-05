@@ -54,7 +54,6 @@ public class Mapper {
      * </p>
      */
     public Club convertClubDtoToEntity(ClubRequestDto clubRequestDto){
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         Club club  = modelMapper.map(clubRequestDto, Club.class);
         return club;
     }
@@ -135,7 +134,6 @@ public class Mapper {
      * </p>
      */
     public ClubResponseDto convertClubEntityToDto(Club club) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         ClubResponseDto clubResponseDto = modelMapper.map(club, ClubResponseDto.class);
         return clubResponseDto;
     }
