@@ -78,6 +78,7 @@ public class ClubServiceImpl implements ClubService {
     public List<StudentResponseDto> showAllStudentsOfClub(int clubId) {
         Club club = clubRepo.findById(clubId)
                 .orElseThrow(() -> new ClubException("No club available with this Id "+clubId));
+        //Convert Set of student into List of student
         List<Student> students = new ArrayList<>(club.getStudents());
         return mapper.covertStudentEntityToDto(students);
     }

@@ -37,7 +37,7 @@ public class StudentController {
             studentService.createStudentDetail(studentRequestDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception e){
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -57,7 +57,7 @@ public class StudentController {
              studentResponseDto.setAge(age);
              return new ResponseEntity<>(studentResponseDto, HttpStatus.OK);
          }catch (Exception e){
-             logger.error(e.getMessage());
+             logger.error(e.getMessage(), e);
          }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
@@ -73,7 +73,7 @@ public class StudentController {
             studentService.removeStudentByRollNo(rollNo);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (Exception e){
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -106,7 +106,13 @@ public class StudentController {
     * </p>
     */
    @PostMapping("/addStudentToClub")
-    public void addStudentToClub(@RequestBody StudentAssignClubDto studentAssignClubDto) {
-       studentService.assignStudentToClub(studentAssignClubDto);
+    public ResponseEntity<HttpStatus> addStudentToClub(@RequestBody StudentAssignClubDto studentAssignClubDto) {
+       try {
+           studentService.assignStudentToClub(studentAssignClubDto);
+           return new ResponseEntity<>(HttpStatus.CREATED);
+       }catch(Exception e){
+           logger.error(e.getMessage(), e);
+       }
+       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

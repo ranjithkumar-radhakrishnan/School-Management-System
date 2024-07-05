@@ -11,7 +11,6 @@ public class StudentRequestDto {
     private Date dob;
     private AddressRequestDto address;
     private GradeRequestDto grade;
-    private Set<ClubRequestDto> clubs;
 
     public String getName() {
         return name;
@@ -50,13 +49,5 @@ public class StudentRequestDto {
 
     public void setGrade(GradeRequestDto grade) {
         this.grade = grade;
-    }
-
-    public Set<ClubRequestDto> getClubs() {
-        return clubs;
-    }
-
-    public void setClubs(Set<ClubRequestDto> clubs) {
-        this.clubs = clubs;
     }
 }

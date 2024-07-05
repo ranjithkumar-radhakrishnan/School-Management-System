@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentService{
                 logger.info("Student successfully added whose rollNo {}", student.getRollNo());
             }
         }catch(Exception e){
-            throw new StudentException("Unable to add the student detail");
+            throw new StudentException("Unable to add the student detail", e);
         }
     }
 
@@ -121,7 +121,8 @@ public class StudentServiceImpl implements StudentService{
     * @throws StudentException if unable to add the student to clubs
     */
     public void assignStudentToClub(StudentAssignClubDto studentAssignClubDto) {
-        Student student = studentRepo.findById(studentAssignClubDto.getRollNo()).orElse(new Student());
+        Student student = studentRepo.findById(studentAssignClubDto.getRollNo())
+                        .orElseThrow(() -> new StudentException("No student enrolled with rollNo " + studentAssignClubDto.getRollNo()));
         logger.debug("Already enrolled student whose rollNo " + student.getRollNo());
         Set<Club> clubs =clubService.getClubs(studentAssignClubDto.getClubs());
         student.setClubs(clubs);

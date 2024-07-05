@@ -20,6 +20,7 @@ public class Mapper {
 
     @Autowired
     private ModelMapper modelMapper;
+
     /**
      * <p>
      * Converts the StudentRequestDto into Student entity
@@ -30,11 +31,7 @@ public class Mapper {
     public Student convertDtoToEntity(StudentRequestDto studentRequestDto){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         Address address = modelMapper.map(studentRequestDto.getAddress(), Address.class);
-
         Grade grade = modelMapper.map(studentRequestDto.getGrade(), Grade.class);
-
-        Set<Club> clubs = studentRequestDto.getClubs().stream()
-                .map(this::convertClubDtoToEntity).collect(Collectors.toSet());
 
         Student student = new Student();
         student.setName(studentRequestDto.getName());
@@ -42,20 +39,7 @@ public class Mapper {
         student.setDob(studentRequestDto.getDob());
         student.setAddress(address);
         student.setGrade(grade);
-        student.setClubs(clubs);
         return student;
-    }
-
-    /**
-     * <p>
-     * Converts the ClubRequestDto into Club entity
-     * ClubRequestDto contains club detail except club Id
-     * which automatically generated in database
-     * </p>
-     */
-    public Club convertClubDtoToEntity(ClubRequestDto clubRequestDto){
-        Club club  = modelMapper.map(clubRequestDto, Club.class);
-        return club;
     }
 
     /**
@@ -137,4 +121,17 @@ public class Mapper {
         ClubResponseDto clubResponseDto = modelMapper.map(club, ClubResponseDto.class);
         return clubResponseDto;
     }
+
+    /**
+     * <p>
+     * Converts the ClubRequestDto into Club entity
+     * ClubRequestDto contains club detail except club Id
+     * which automatically generated in database
+     * </p>
+     */
+    public Club convertClubDtoToEntity(ClubRequestDto clubRequestDto){
+        Club club  = modelMapper.map(clubRequestDto, Club.class);
+        return club;
+    }
+
 }
