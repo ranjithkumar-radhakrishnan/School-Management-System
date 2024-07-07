@@ -1,18 +1,17 @@
 package com.i2i.sms.dto;
 
 public class AddressResponseDto {
-    private int addressId;
+    private String addressId;
     private String doorNo;
     private String street;
     private String city;
     private String state;
     private int pincode;
 
-    public int getAddressId() {
+    public String getAddressId() {
         return addressId;
     }
-
-    public void setAddressId(int addressId) {
+    public void setAddressId(String addressId) {
         this.addressId = addressId;
     }
 

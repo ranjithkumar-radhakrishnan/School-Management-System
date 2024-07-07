@@ -3,6 +3,7 @@ package com.i2i.sms.model;
 import java.util.Set;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,9 +26,9 @@ import jakarta.persistence.Table;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "student_id")
-    private int rollNo;
+    private String id;
 
     @Column(name = "student_name")
     private String name;
@@ -54,20 +55,12 @@ public class Student {
     )
     private Set<Club> clubs;
 
-    public void setRollNo(int rollNo) {
-        this.rollNo = rollNo;
-    }
-    public int getRollNo() {
-        return rollNo;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
     public String getName() {
         return name;
     }
-
     public void setMark(int mark) {
         this.mark = mark;
     }
@@ -103,10 +96,17 @@ public class Student {
         return clubs;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\t\tStudent RollNo: ").append(rollNo)
-                     .append("\n\t\tStudent Name: ").append(name)
+        stringBuilder.append("\n\t\tStudent Name: ").append(name)
                      .append("\n\t\tStudent mark: ").append(mark)
                      .append("\n\t\tStudent DOB: ").append(dob)
                      .append("\n\t\tAddress: ").append(address);

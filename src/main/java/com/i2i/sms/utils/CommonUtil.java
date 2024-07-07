@@ -16,10 +16,8 @@ public final class CommonUtil{
     * It validates whether the given name is valid or not.
     * It checks whether it contains any special characters or numbers rather than lowercase,uppercase letters and spaces.
     * </p>
-    *
-    * @param dob
-    *         Student name given as String.
-    *
+    * @param str
+    *        Sequence of characters given as String.
     * @return Boolean type as true if the given name is valid or else returns false.
     */
     public static boolean isValidString(String str) {
@@ -113,5 +111,4 @@ public final class CommonUtil{
             return false;
         }
     }
-  
 }

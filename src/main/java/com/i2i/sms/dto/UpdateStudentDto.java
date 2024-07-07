@@ -2,21 +2,12 @@ package com.i2i.sms.dto;
 
 import java.util.Date;
 
-public class StudentGradeResponseDto {
-    private String id;
+public class UpdateStudentDto {
     private String name;
     private int mark;
-    private int age;
     private Date dob;
-    private AddressResponseDto address;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private AddressRequestDto address;
+    private UpdateGradeDto grade;
 
     public String getName() {
         return name;
@@ -42,19 +33,19 @@ public class StudentGradeResponseDto {
         this.dob = dob;
     }
 
-    public AddressResponseDto getAddress() {
+    public AddressRequestDto getAddress() {
         return address;
     }
 
-    public void setAddress(AddressResponseDto address) {
+    public void setAddress(AddressRequestDto address) {
         this.address = address;
     }
 
-    public int getAge() {
-        return age;
+    public UpdateGradeDto getGrade() {
+        return grade;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setGrade(UpdateGradeDto grade) {
+        this.grade = grade;
     }
 }

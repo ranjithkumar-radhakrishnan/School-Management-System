@@ -4,7 +4,6 @@ public class ClubRequestDto {
     private String name;
     private String president;
     private String website;
-    private int count;
 
     public String getName() {
         return name;
@@ -27,13 +26,5 @@ public class ClubRequestDto {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 }

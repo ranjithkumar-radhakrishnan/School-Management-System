@@ -17,9 +17,9 @@ import jakarta.persistence.OneToOne;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "address_id")
-    private int addressId;
+    private String addressId;
     private String doorNo;
     private String street;
     private String city;
@@ -30,13 +30,14 @@ public class Address {
     @JsonIgnore
     private Student student;
 
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
-    }
-    public int getAddressId() {
+    public String getAddressId() {
         return addressId;
     }
-    
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
+    }
+
     public void setDoorNo(String doorNo) {
         this.doorNo = doorNo;
     }

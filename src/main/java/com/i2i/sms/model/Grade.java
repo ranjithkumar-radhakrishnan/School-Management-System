@@ -20,9 +20,9 @@ import jakarta.persistence.Table;
 public class Grade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "grade_id")
-    private int gradeId;
+    private String gradeId;
     private int standard;
     private Character section;
 
@@ -33,12 +33,6 @@ public class Grade {
     @JsonIgnore
     private Set<Student> students;
 
-    public void setGradeId(int gradeId) {
-        this.gradeId = gradeId;
-    }
-    public int getGradeId() {
-        return gradeId;
-    }
 
     public void setStandard(int standard) {
         this.standard = standard;
@@ -47,13 +41,21 @@ public class Grade {
         return standard;
     }
 
-    public void setSection(char section) {
-        this.section = section;
+    public String getGradeId() {
+        return gradeId;
     }
-    public char getSection() {
+    public void setGradeId(String gradeId) {
+        this.gradeId = gradeId;
+    }
+
+    public Character getSection() {
         return section;
     }
-  
+
+    public void setSection(Character section) {
+        this.section = section;
+    }
+
     public void setStudents(Set<Student> students) {
         this.students = students;
     }

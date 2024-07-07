@@ -20,9 +20,9 @@ import jakarta.persistence.Table;
 public class Club {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "club_id")
-    private int id;
+    private String id;
 
     @Column(name = "club_name")
     private String name;
@@ -33,18 +33,15 @@ public class Club {
     @Column(name = "club_website")
     private String website;
 
-    @Column(name = "club_count")
-    private int count;
-
     @ManyToMany(mappedBy = "clubs", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Student> students;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-    public int getId() {
+    public String getId() {
         return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -68,13 +65,6 @@ public class Club {
         return website;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-    public int getCount() {
-        return count;
-    }
-
     public void setStudents(Set<Student> students) {
         this.students = students;
     }
@@ -87,8 +77,7 @@ public class Club {
         stringBuilder.append("\t\tClub Id: ").append(id)
                      .append("\n\t\tClub Name: ").append(name)
                      .append("\n\t\tClub President: ").append(president)
-                     .append("\n\t\tClub website:").append(website)
-                     .append("\n\t\tcount: ").append(count);
+                     .append("\n\t\tClub website:").append(website);
         return stringBuilder.toString();
     }
 }

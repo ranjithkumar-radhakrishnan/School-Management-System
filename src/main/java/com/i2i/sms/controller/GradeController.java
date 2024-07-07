@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.i2i.sms.dto.StudentGradeResponseDto;
+import com.i2i.sms.exception.GradeException;
 import com.i2i.sms.service.GradeService;
 import com.i2i.sms.utils.DateUtil;
 
@@ -29,9 +30,13 @@ public class GradeController {
      * <p>
      * It displays the students of grade
      * </p>
+     * @param gradeId
+     *        Id of the grade as String
+     * @throws GradeException if unable to get the students of the grade
+     * @return  ResponseEntity of List of StudentGradeResponseDto if present or http status NOT_FOUND
      */
     @GetMapping("/{gradeId}")
-    public ResponseEntity<Set<StudentGradeResponseDto>> getStudentsOfGrade(@PathVariable("gradeId") int gradeId){
+    public ResponseEntity<Set<StudentGradeResponseDto>> getStudentsOfGrade(@PathVariable("gradeId") String gradeId){
         try {
             Set<StudentGradeResponseDto> studentGradeResponseDtos = gradeService.getStudentsOfGrade(gradeId);
             studentGradeResponseDtos.forEach(studentGradeResponse -> {

@@ -9,6 +9,8 @@ import com.i2i.sms.model.Grade;
  *This interface has declared methods which used to get, display the grade details
  */
 public interface GradeService {
-    Set<StudentGradeResponseDto> getStudentsOfGrade(int gradeId);
+    Set<StudentGradeResponseDto> getStudentsOfGrade(String gradeId);
     Grade getGradeOfStandardAndSection(Grade grade);
+
+    void updateGradeCount(Grade grade);
 }

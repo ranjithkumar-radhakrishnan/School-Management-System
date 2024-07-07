@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.i2i.sms.model.Club;
 
 @Repository
-public interface ClubRepo extends JpaRepository<Club,Integer> {
+public interface ClubRepo extends JpaRepository<Club, String> {
 }

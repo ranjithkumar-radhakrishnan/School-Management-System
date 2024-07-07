@@ -1,5 +1,6 @@
 package com.i2i.sms.helper;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,6 +34,8 @@ public class Mapper {
         Address address = modelMapper.map(studentRequestDto.getAddress(), Address.class);
         Grade grade = modelMapper.map(studentRequestDto.getGrade(), Grade.class);
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
         Student student = new Student();
         student.setName(studentRequestDto.getName());
         student.setMark(studentRequestDto.getMark());
@@ -65,7 +68,7 @@ public class Mapper {
         GradeResponseDto gradeResponseDto = modelMapper.map(student.getGrade(), GradeResponseDto.class);
         AddressResponseDto addressResponseDto = modelMapper.map(student.getAddress(), AddressResponseDto.class);
         StudentResponseDto studentResponseDto = new StudentResponseDto();
-        studentResponseDto.setRollNo(student.getRollNo());
+        studentResponseDto.setId(student.getId());
         studentResponseDto.setName(student.getName());
         studentResponseDto.setMark(student.getMark());
         studentResponseDto.setDob(student.getDob());
@@ -95,7 +98,7 @@ public class Mapper {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         AddressResponseDto addressResponseDto= modelMapper.map(student.getAddress(), AddressResponseDto.class);
         StudentGradeResponseDto studentGradeResponseDto = new StudentGradeResponseDto();
-        studentGradeResponseDto.setRollNo(student.getRollNo());
+        studentGradeResponseDto.setId(student.getId());
         studentGradeResponseDto.setName(student.getName());
         studentGradeResponseDto.setMark(student.getMark());
         studentGradeResponseDto.setDob(student.getDob());
@@ -134,4 +137,14 @@ public class Mapper {
         return club;
     }
 
+    public AddStudentToClubResponseDto convertStudentAddClubEntityToDto(List<ClubResponseDto> addedClubs, List<String> noExistClubIds) {
+        AddStudentToClubResponseDto addStudentToClubResponseDto = new AddStudentToClubResponseDto();
+        addStudentToClubResponseDto.setAddedClubs(addedClubs);
+        addStudentToClubResponseDto.setNoClubsExist(noExistClubIds);
+        return addStudentToClubResponseDto;
+    }
+
+    public Grade convertUpdateGradeDtoToEntity(UpdateGradeDto updateGradeDto){
+         return modelMapper.map(updateGradeDto, Grade.class);
+    }
 }

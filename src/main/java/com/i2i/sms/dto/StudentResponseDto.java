@@ -1,11 +1,11 @@
 package com.i2i.sms.dto;
 
-import com.i2i.sms.model.Address;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
 public class StudentResponseDto {
-    private int rollNo;
+    private String id;
     private String name;
     private int mark;
     private int age;
@@ -13,11 +13,11 @@ public class StudentResponseDto {
     private AddressResponseDto address;
     private GradeResponseDto grade;
 
-    public int getRollNo() {
-        return rollNo;
+    public String getId() {
+        return id;
     }
-    public void setRollNo(int rollNo) {
-        this.rollNo = rollNo;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

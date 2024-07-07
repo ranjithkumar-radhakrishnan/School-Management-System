@@ -20,23 +20,23 @@
             <AppenderRef ref="RollingFile"/>
         </Root>
         <!-- Turn off all other logs -->
-        <Logger name="org.springframework" level="off" additivity="false">
+       <!-- <Logger name="org.springframework" level="off" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
-        </Logger>
-        <Logger name="com.zaxxer.hikari" level="off" additivity="false">
+        </Logger> -->
+       <!-- <Logger name="com.zaxxer.hikari" level="off" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
-        </Logger>
+        </Logger>-->
 
         <Logger name="org.hibernate" level="off" additivity="false">
             <AppenderRef ref="ApplicationConsole"/>
             <AppenderRef ref="RollingFile"/>
         </Logger>
-        <Logger name="com.i2i.sms" level="debug" additivity="false">
+        <!--<Logger name="com.i2i.sms" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
-        </Logger>
+        </Logger>-->
     </Loggers>
 </Configuration>
 

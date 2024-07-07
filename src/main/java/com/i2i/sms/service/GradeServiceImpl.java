@@ -27,13 +27,14 @@ public class GradeServiceImpl implements GradeService{
 
     /**
      * <p>
-     * Get the students of given grade id as StudentGradeResponseDto
+     * It displays the students of grade
      * </p>
      * @param gradeId
-     *        grade Id as int
-     * @return Set of StudentGradeResponseDto if given grade present
+     *        Id of the grade as String
+     * @throws GradeException if unable to get the students of the grade
+     * @return Set of StudentGradeResponseDto if present
      */
-    public Set<StudentGradeResponseDto> getStudentsOfGrade(int gradeId){
+    public Set<StudentGradeResponseDto> getStudentsOfGrade(String gradeId){
         Grade grade = gradeRepo.findById(gradeId)
                 .orElseThrow(() -> new GradeException("No grade found with this Id " + gradeId));
         Set<Student> students = grade.getStudents();
@@ -51,4 +52,19 @@ public class GradeServiceImpl implements GradeService{
     public Grade getGradeOfStandardAndSection(Grade grade){
         return gradeRepo.findByStandardAndSection(grade.getStandard(), grade.getSection());
     }
+
+    /**
+     * <p>
+     * It updates the grade count
+     * </p>
+     * @param grade
+     *        grade which contains the standard and section
+     */
+    public void updateGradeCount(Grade grade) {
+        int sectionCount = grade.getSectionCount();
+        sectionCount = sectionCount + 1;
+        grade.setSectionCount(sectionCount);
+        gradeRepo.save(grade);
+    }
+
 }

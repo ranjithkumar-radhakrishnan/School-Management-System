@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.i2i.sms.dto.ClubRequestDto;
 import com.i2i.sms.dto.StudentResponseDto;
+import com.i2i.sms.exception.ClubException;
 import com.i2i.sms.service.ClubService;
 import com.i2i.sms.utils.DateUtil;
 
@@ -25,27 +26,34 @@ public class ClubController {
 
     /**
      * <p>
-     * It creates the Club
+     * It creates the new Club
      * </p>
+     * @param clubRequestDto {@link ClubRequestDto}
+     * @throws ClubException if unable to add the club
+     * @return ResponseEntity of ClubResponseDto if club created or else http status NOT_FOUND
      */
     @PostMapping
-    public ResponseEntity<HttpStatus> addClub(@RequestBody ClubRequestDto clubRequestDto){
+    public ResponseEntity<ClubResponseDto> addClub(@RequestBody ClubRequestDto clubRequestDto){
         try {
-            clubService.addClubDetail(clubRequestDto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            ClubResponseDto clubResponseDto = clubService.addClubDetail(clubRequestDto);
+            return new ResponseEntity<>(clubResponseDto, HttpStatus.CREATED);
         }catch (Exception e){
             logger.error(e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     /**
      * <p>
-     * It gets all students of the given grade
+     * It gets all students of the given club Id
      * </p>
+     * @param clubId
+     *        Id of the club as String
+     * @throws ClubException if unable to get the students of the club
+     * @return ResponseEntity of List of StudentResponseDto if present or else http status NOT_FOUND
      */
     @GetMapping("/{clubId}")
-    public ResponseEntity<List<StudentResponseDto>> getAllStudentsOfClub(@PathVariable("clubId") int clubId){
+    public ResponseEntity<List<StudentResponseDto>> getAllStudentsOfClub(@PathVariable("clubId") String clubId){
         try {
            List<StudentResponseDto> studentResponseDtos=  clubService.showAllStudentsOfClub(clubId);
             studentResponseDtos.forEach(studentResponse -> {
@@ -65,6 +73,7 @@ public class ClubController {
      * <p>
      * It gets all the clubs
      * </p>
+     * @return ResponseEntity of List of ClubResponseDto if present or else http status NOT_FOUND
      */
     @GetMapping
     public ResponseEntity<List<ClubResponseDto>> getAllClubs(){

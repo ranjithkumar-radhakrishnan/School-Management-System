@@ -1,17 +1,15 @@
 package com.i2i.sms.dto;
 
 public class ClubResponseDto {
-    private int id;
+    private String id;
     private String name;
     private String president;
     private String website;
-    private int count;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -37,13 +35,5 @@ public class ClubResponseDto {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 }

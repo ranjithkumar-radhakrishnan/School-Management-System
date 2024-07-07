@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Locale;
 
 /**
 *
@@ -18,16 +19,12 @@ public final class DateUtil {
 
   private DateUtil() {
   }
-
   /**
   * <p>
-  *
   * Calculates the difference between the present date and user given date.
   * If you want to calculate difference between two different date, the second date can be passed as second parameter.
   * Pass second parameter as null to calculate the difference between the present date and user given date.
-  *
   * </p>
-  *
   * @param startDate
   *        Date must be in format of "dd/MM/yyyy" as Date object.
   *        StartDate must be lesser than endDate to get years in positive or else it returns years in negative.
@@ -35,7 +32,6 @@ public final class DateUtil {
   *        Date must be in format of "dd/MM/yyyy" as String type.
   *        Pass the second date to calculate difference between two dates, or else pass null to calculate the
   *        difference between present date and user given date.
-  *
   * @return Returns number of year as Integer
   */
   public static int getDifferenceBetweenDateByYears(Date startDate, String endDate) {
@@ -64,27 +60,18 @@ public final class DateUtil {
  
    /**
    * <p>
-   *
    * Validates the given string is in "dd/MM/yyyy" date format.
-   *
    * </p>
-   *
-   * @param date
+   * @param userDate
    *        String passed as parameter to check if it is in correct "dd/MM/yyyy" format.
-   *
    * @return Date if given String in "dd/MM/yyyy" format or else null
    */
-   public static Date validateDateFormat(String userDate) {
-      
-      SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-      formatter.setLenient(false);
-      try {
-         Date date = formatter.parse(userDate);
-         return date;
-      } catch (Exception e) {
-         return null;
-      }
-        
+   public static Date validateDateFormat(Date userDate) {
+       SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+       try {
+           return  inputFormat.parse(String.valueOf(userDate));
+       } catch (ParseException e) {
+           return null;
+       }
    }
-   
 }
