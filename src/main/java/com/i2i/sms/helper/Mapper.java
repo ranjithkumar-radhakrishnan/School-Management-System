@@ -145,6 +145,10 @@ public class Mapper {
     }
 
     public Grade convertUpdateGradeDtoToEntity(UpdateGradeDto updateGradeDto){
-         return modelMapper.map(updateGradeDto, Grade.class);
+        Grade grade = new Grade();
+        grade.setStandard(updateGradeDto.getStandard());
+        grade.setSection(updateGradeDto.getSection());
+        return grade;
+         //return modelMapper.map(updateGradeDto, Grade.class);
     }
 }

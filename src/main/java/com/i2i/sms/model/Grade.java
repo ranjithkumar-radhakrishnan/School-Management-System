@@ -69,11 +69,5 @@ public class Grade {
     public int getSectionCount() {
         return sectionCount;
     }
-    
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\t\tstandard: ").append(standard)
-                     .append("\n\t\tsection: ").append(section);
-        return stringBuilder.toString();
-    }
+
 }

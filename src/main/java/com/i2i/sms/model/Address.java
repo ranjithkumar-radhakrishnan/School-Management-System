@@ -79,14 +79,4 @@ public class Address {
     public Student getStudent() {
         return student;
     }
-
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n\t\tDoor No: ").append(doorNo)
-                     .append(" Street: ").append(street)
-                     .append(" City: ").append(city)
-                     .append(" State: ").append(state)
-                     .append(" pincode: ").append(pincode);
-        return stringBuilder.toString();
-    }
 } 

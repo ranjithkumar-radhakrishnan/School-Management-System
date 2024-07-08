@@ -1,14 +1,11 @@
 package com.i2i.sms.dto;
 
-import com.i2i.sms.model.Club;
-
-import java.util.Date;
-import java.util.Set;
+import java.time.LocalDate;
 
 public class StudentRequestDto {
     private String name;
     private int mark;
-    private Date dob;
+    private LocalDate dob;
     private AddressRequestDto address;
     private GradeRequestDto grade;
 
@@ -27,11 +24,11 @@ public class StudentRequestDto {
         this.mark = mark;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

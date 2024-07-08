@@ -1,7 +1,7 @@
 package com.i2i.sms.model;
 
+import java.time.LocalDate;
 import java.util.Set;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.CascadeType;
@@ -37,7 +37,8 @@ public class Student {
     private int mark;
 
     @Column(name = "student_dob")
-    private Date dob;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dob;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
@@ -68,13 +69,13 @@ public class Student {
         return mark;
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
-  
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
     public void setAddress(Address address) {
         this.address = address;
     }
@@ -103,16 +104,6 @@ public class Student {
     public void setId(String id) {
         this.id = id;
     }
-
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n\t\tStudent Name: ").append(name)
-                     .append("\n\t\tStudent mark: ").append(mark)
-                     .append("\n\t\tStudent DOB: ").append(dob)
-                     .append("\n\t\tAddress: ").append(address);
-        return stringBuilder.toString();
-    }
-
 }
 
 

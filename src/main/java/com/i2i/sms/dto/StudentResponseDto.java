@@ -2,6 +2,7 @@ package com.i2i.sms.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class StudentResponseDto {
@@ -9,7 +10,7 @@ public class StudentResponseDto {
     private String name;
     private int mark;
     private int age;
-    private Date dob;
+    private LocalDate dob;
     private AddressResponseDto address;
     private GradeResponseDto grade;
 
@@ -42,10 +43,11 @@ public class StudentResponseDto {
         this.age = age;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
-    public void setDob(Date dob) {
+
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

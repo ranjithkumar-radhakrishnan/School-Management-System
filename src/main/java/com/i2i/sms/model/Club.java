@@ -72,12 +72,4 @@ public class Club {
         return students;
     }
 
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\t\tClub Id: ").append(id)
-                     .append("\n\t\tClub Name: ").append(name)
-                     .append("\n\t\tClub President: ").append(president)
-                     .append("\n\t\tClub website:").append(website);
-        return stringBuilder.toString();
-    }
 }

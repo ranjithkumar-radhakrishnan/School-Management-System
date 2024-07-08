@@ -3,6 +3,7 @@ package com.i2i.sms.controller;
 import java.util.List;
 
 import com.i2i.sms.dto.ClubResponseDto;
+import com.i2i.sms.utils.CommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,18 @@ public class ClubController {
      * @return ResponseEntity of ClubResponseDto if club created or else http status NOT_FOUND
      */
     @PostMapping
-    public ResponseEntity<ClubResponseDto> addClub(@RequestBody ClubRequestDto clubRequestDto){
+    public ResponseEntity<?> addClub(@RequestBody ClubRequestDto clubRequestDto){
         try {
-            ClubResponseDto clubResponseDto = clubService.addClubDetail(clubRequestDto);
-            return new ResponseEntity<>(clubResponseDto, HttpStatus.CREATED);
+            if(CommonUtil.isValidString(clubRequestDto.getName())) {
+                if(CommonUtil.isValidString(clubRequestDto.getPresident())) {
+                    ClubResponseDto clubResponseDto = clubService.addClubDetail(clubRequestDto);
+                    return new ResponseEntity<>(clubResponseDto, HttpStatus.CREATED);
+                }else{
+                    return new ResponseEntity<>("Invalid President name : " + clubRequestDto.getPresident(), HttpStatus.BAD_REQUEST);
+                }
+            }else {
+                return new ResponseEntity<>("Invalid Club name : " + clubRequestDto.getName(), HttpStatus.BAD_REQUEST);
+            }
         }catch (Exception e){
             logger.error(e.getMessage());
         }

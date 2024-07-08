@@ -3,6 +3,7 @@ package com.i2i.sms.controller;
 import java.util.List;
 
 import com.i2i.sms.exception.StudentException;
+import com.i2i.sms.helper.Validator;
 import com.i2i.sms.utils.CommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +31,8 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
-
+    @Autowired
+    private Validator validator;
     private static final Logger logger = LogManager.getLogger(StudentController.class);
 
    /**
@@ -64,31 +66,33 @@ public class StudentController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+
     /**
      * <p>
      * Validates the Student information such as name, mark, dob
      * Student information are gathered by in the form of StudentRequestDto
      * </p>
+     *
      * @param studentRequestDto {@link StudentRequestDto}
      * @return ResponseEntity as null if validated or else send Http bad request
      */
     private ResponseEntity<?> validRequest(StudentRequestDto studentRequestDto) {
-        if(CommonUtil.isValidString(studentRequestDto.getName())){
-            if(CommonUtil.isValidRangeOfNumber(studentRequestDto.getMark(), 0, 100)){
-                if(null != DateUtil.validateDateFormat(studentRequestDto.getDob())){
+        if (CommonUtil.isValidString(studentRequestDto.getName())) {
+            if (CommonUtil.isValidRangeOfNumber(studentRequestDto.getMark(), 0, 100)) {
+                if (null != DateUtil.validateDateFormat(studentRequestDto.getDob().toString())) {
                     int age = DateUtil.getDifferenceBetweenDateByYears(studentRequestDto.getDob(), null);
-                    if(CommonUtil.isValidRangeOfNumber(age, 6, 17)) {
+                    if (CommonUtil.isValidRangeOfNumber(age, 6, 17)) {
                         return validateAddressRequest(studentRequestDto);
-                    }else{
+                    } else {
                         return new ResponseEntity<>("Student age not valid for the grade, Invalid age: " + age, HttpStatus.BAD_REQUEST);
                     }
-                }else{
+                } else {
                     return new ResponseEntity<>("Invalid Date provided, it should be in format yyyy-MM-dd", HttpStatus.BAD_REQUEST);
                 }
-            }else{
+            } else {
                 return new ResponseEntity<>("Invalid Mark range, it should be between 0 to 100", HttpStatus.BAD_REQUEST);
             }
-        }else{
+        } else {
             return new ResponseEntity<>("Invalid Student Name " + studentRequestDto.getName(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -248,8 +252,15 @@ public class StudentController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable("id") String id, @RequestBody UpdateStudentDto updateStudentDto){
         try {
-            StudentResponseDto studentResponseDto = studentService.updateStudent(id, updateStudentDto);
-            return new ResponseEntity<>(studentResponseDto, HttpStatus.OK);
+            ResponseEntity<?> responseEntity = validator.validRequest(updateStudentDto);
+            if(null == responseEntity) {
+                StudentResponseDto studentResponseDto = studentService.updateStudent(id, updateStudentDto);
+                int age = DateUtil.getDifferenceBetweenDateByYears(studentResponseDto.getDob(), null);
+                studentResponseDto.setAge(age);
+                return new ResponseEntity<>(studentResponseDto, HttpStatus.OK);
+            }else{
+                return responseEntity;
+            }
         }catch (Exception e){
             logger.error(e.getMessage(), e);
         }

@@ -1,5 +1,6 @@
 package com.i2i.sms.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class StudentGradeResponseDto {
@@ -7,7 +8,7 @@ public class StudentGradeResponseDto {
     private String name;
     private int mark;
     private int age;
-    private Date dob;
+    private LocalDate dob;
     private AddressResponseDto address;
 
     public String getId() {
@@ -34,11 +35,10 @@ public class StudentGradeResponseDto {
         this.mark = mark;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
-
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
