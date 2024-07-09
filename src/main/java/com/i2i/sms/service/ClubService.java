@@ -14,6 +14,6 @@ public interface ClubService {
     ClubResponseDto addClubDetail(ClubRequestDto clubRequestDto);
     List<ClubResponseDto> getAllClubs();
     List<StudentResponseDto> showAllStudentsOfClub(String clubId);
-    Club getClubs(String clubId);
+    Club getClub(String clubId);
     boolean isClubExist(String clubId);
 }

@@ -3,7 +3,7 @@ package com.i2i.sms.service;
 import java.util.List;
 
 import com.i2i.sms.dto.*;
-import com.i2i.sms.model.Student;
+
 
 /**
  *This interface has declared methods which used to add, get, display and remove the student details

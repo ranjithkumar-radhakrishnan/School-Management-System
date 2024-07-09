@@ -18,7 +18,7 @@ import com.i2i.sms.service.ClubService;
 import com.i2i.sms.utils.DateUtil;
 
 @RestController
-@RequestMapping("/sms/api/v1/clubs")
+@RequestMapping("/v1/clubs")
 public class ClubController {
     @Autowired
     private ClubService clubService;
@@ -64,14 +64,19 @@ public class ClubController {
     @GetMapping("/{clubId}")
     public ResponseEntity<List<StudentResponseDto>> getAllStudentsOfClub(@PathVariable("clubId") String clubId){
         try {
-           List<StudentResponseDto> studentResponseDtos=  clubService.showAllStudentsOfClub(clubId);
-            studentResponseDtos.forEach(studentResponse -> {
-                int age = DateUtil.getDifferenceBetweenDateByYears(studentResponse.getDob(), null);
-                logger.debug("Calculates the student age " + age + " by their DOB ");
-                studentResponse.setAge(age);
-            });
-           logger.info("Students retrieved succesfully of club Id {}", clubId);
-           return new ResponseEntity<>(studentResponseDtos, HttpStatus.OK);
+           List<StudentResponseDto> studentResponseDtos =  clubService.showAllStudentsOfClub(clubId);
+           //check if the club has students or not
+           if(studentResponseDtos != null) {
+               studentResponseDtos.forEach(studentResponse -> {
+                   int age = DateUtil.getDifferenceBetweenDateByYears(studentResponse.getDob(), null);
+                   logger.debug("Calculates the student age " + age + " by their DOB ");
+                   studentResponse.setAge(age);
+               });
+               logger.info("Students retrieved successfully of club Id {}", clubId);
+               return new ResponseEntity<>(studentResponseDtos, HttpStatus.OK);
+           }else{
+               return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+           }
         }catch (Exception e){
             logger.error(e.getMessage());
         }
@@ -91,7 +96,7 @@ public class ClubController {
             logger.info("Clubs retrieved successfully");
             return new ResponseEntity<>(clubResponseDtos, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(clubResponseDtos, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 }

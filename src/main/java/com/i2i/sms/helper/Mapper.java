@@ -42,7 +42,7 @@ public class Mapper {
         student.setDob(studentRequestDto.getDob());
         student.setAddress(address);
         student.setGrade(grade);
-        return student;
+        return modelMapper.map(studentRequestDto, Student.class);
     }
 
     /**
@@ -56,7 +56,6 @@ public class Mapper {
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
     }
-
     /**
      * <p>
      * Converts the Student entity into studentGradeResponseDto
@@ -65,16 +64,7 @@ public class Mapper {
      */
     public StudentResponseDto convertEntityToDto(Student student){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        GradeResponseDto gradeResponseDto = modelMapper.map(student.getGrade(), GradeResponseDto.class);
-        AddressResponseDto addressResponseDto = modelMapper.map(student.getAddress(), AddressResponseDto.class);
-        StudentResponseDto studentResponseDto = new StudentResponseDto();
-        studentResponseDto.setId(student.getId());
-        studentResponseDto.setName(student.getName());
-        studentResponseDto.setMark(student.getMark());
-        studentResponseDto.setDob(student.getDob());
-        studentResponseDto.setAddress(addressResponseDto);
-        studentResponseDto.setGrade(gradeResponseDto);
-        return studentResponseDto;
+        return modelMapper.map(student, StudentResponseDto.class);
     }
 
     /**
@@ -96,14 +86,7 @@ public class Mapper {
      */
     private StudentGradeResponseDto covertStudentOfGradeEntityToDto(Student student){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        AddressResponseDto addressResponseDto= modelMapper.map(student.getAddress(), AddressResponseDto.class);
-        StudentGradeResponseDto studentGradeResponseDto = new StudentGradeResponseDto();
-        studentGradeResponseDto.setId(student.getId());
-        studentGradeResponseDto.setName(student.getName());
-        studentGradeResponseDto.setMark(student.getMark());
-        studentGradeResponseDto.setDob(student.getDob());
-        studentGradeResponseDto.setAddress(addressResponseDto);
-        return studentGradeResponseDto;
+        return modelMapper.map(student, StudentGradeResponseDto.class);
     }
     /**
      * <p>
@@ -137,10 +120,11 @@ public class Mapper {
         return club;
     }
 
-    public AddStudentToClubResponseDto convertStudentAddClubEntityToDto(List<ClubResponseDto> addedClubs, List<String> noExistClubIds) {
+    public AddStudentToClubResponseDto convertToAddStudentToClubResponseDto(List<ClubResponseDto> addedClubs, List<String> noExistClubIds, List<String> alreadyexistClubs) {
         AddStudentToClubResponseDto addStudentToClubResponseDto = new AddStudentToClubResponseDto();
         addStudentToClubResponseDto.setAddedClubs(addedClubs);
         addStudentToClubResponseDto.setNoClubsExist(noExistClubIds);
+        addStudentToClubResponseDto.setAlreadyAddedClubs(alreadyexistClubs);
         return addStudentToClubResponseDto;
     }
 
@@ -149,6 +133,5 @@ public class Mapper {
         grade.setStandard(updateGradeDto.getStandard());
         grade.setSection(updateGradeDto.getSection());
         return grade;
-         //return modelMapper.map(updateGradeDto, Grade.class);
     }
 }

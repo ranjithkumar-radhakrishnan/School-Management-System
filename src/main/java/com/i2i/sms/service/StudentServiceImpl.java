@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.i2i.sms.utils.DateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ public class StudentServiceImpl implements StudentService{
     public StudentResponseDto createStudentDetail(StudentRequestDto studentRequestDto) {
         Student student = mapper.convertDtoToEntity(studentRequestDto);
         try {
+            //To check if grade already exist
             Grade grade = gradeService.getGradeOfStandardAndSection(student.getGrade());
             StudentResponseDto studentResponseDto = null;
             int sectionCount = 0;
@@ -73,8 +75,8 @@ public class StudentServiceImpl implements StudentService{
                 }
             } else {
                 logger.debug("No grade available, grade will be created {}", studentRequestDto.getGrade());
-               sectionCount = student.getGrade().getSectionCount();
-               sectionCount = sectionCount-1;
+                sectionCount = student.getGrade().getSectionCount();
+                sectionCount = sectionCount-1;
                 student.getGrade().setSectionCount(sectionCount);
                 studentResponseDto = mapper.convertEntityToDto(studentRepo.save(student));
                 logger.info("Student successfully added whose rollNo {}", student.getId());
@@ -92,11 +94,20 @@ public class StudentServiceImpl implements StudentService{
      * @return List of StudentResponseDto if present or else null
      */
     public List<StudentResponseDto> showAllStudentDetails() {
-        if(!studentRepo.findAll().isEmpty()) {
-            logger.debug("It has students, not empty");
-            return mapper.covertStudentEntityToDto(studentRepo.findAll());
-        }else{
-            return null;
+        try {
+            if (!studentRepo.findAll().isEmpty()) {
+                List<StudentResponseDto> studentResponseDtos = mapper.covertStudentEntityToDto(studentRepo.findAll());
+                studentResponseDtos.forEach(studentResponse -> {
+                    int age = DateUtil.getDifferenceBetweenDateByYears(studentResponse.getDob(), null);
+                    logger.debug("Calculates the student age " + age + " by their DOB ");
+                    studentResponse.setAge(age);
+                });
+                return studentResponseDtos;
+            } else {
+                return null;
+            }
+        }catch (Exception e){
+            throw new StudentException("Unable to display the student details");
         }
     }
 
@@ -111,9 +122,12 @@ public class StudentServiceImpl implements StudentService{
     * @return StudentResponseDto if the rollNo of student exist or else throws Exception
     */
     public StudentResponseDto getStudentDetailByRollNo(String id) {
-        Student student = studentRepo.findById(id).orElseThrow(() -> new StudentException("No Student enrolled with id "+ id));
-        logger.debug("Student detail retrieved successfully whose rollNo {}", id);
-        return  mapper.convertEntityToDto(student);
+            Student student = studentRepo.findById(id).orElseThrow(() -> new StudentException("No Student enrolled with id " + id));
+            logger.debug("Student detail retrieved successfully whose rollNo {}", id);
+            StudentResponseDto studentResponseDto = mapper.convertEntityToDto(student);
+            int age = DateUtil.getDifferenceBetweenDateByYears(studentResponseDto.getDob(), null);
+            studentResponseDto.setAge(age);
+            return studentResponseDto;
     }
 
    /**
@@ -129,6 +143,7 @@ public class StudentServiceImpl implements StudentService{
         Student student = studentRepo.findById(id)
                 .orElseThrow(() -> new StudentException("No Student enrolled with id "+id));
         Grade grade = student.getGrade();
+        //update the grade count
         gradeService.updateGradeCount(grade);
         studentRepo.deleteById(id);
         logger.info("Student detail successfully removed whose rollNo {}", id);
@@ -147,27 +162,45 @@ public class StudentServiceImpl implements StudentService{
         Student student = studentRepo.findById(id)
                         .orElseThrow(() -> new StudentException("No student enrolled with rollNo " + id));
         logger.debug("Already enrolled student whose rollNo " + student);
+        //It has the new Clubs added to student
+        Set<Club> newClubs = new HashSet<>();
+        //It has club Ids that do not exist as String
+        List<String> noExistClubIds = new ArrayList<>();
+        //It has club Ids that already added to student as String
+        List<String> alreadyAddedClubs = new ArrayList<>();
 
-        Set<Club> clubs = new HashSet<>();
-        List<String> clubIds = new ArrayList<>();
         for(String clubId : studentAssignClubDto.getClubIds()){
+            Club club = clubService.getClub(clubId);
+            //check if given club exist
             if(clubService.isClubExist(clubId)){
-                clubs.add(clubService.getClubs(clubId));
+                //check if student already added to the clubs
+                if(!student.getClubs().contains(club)) {
+                    newClubs.add(club);
+                }else{
+                    alreadyAddedClubs.add(clubId);
+                }
             }else{
-                clubIds.add(clubId);
+                noExistClubIds.add(clubId);
             }
         }
         List<Club> createdClubs = null;
-        if(!clubs.isEmpty()) {
+        List<ClubResponseDto> clubResponseDtos = null;
+        //Assign the student to clubs
+        if(!newClubs.isEmpty()) {
+            Set<Club> clubs = student.getClubs();
+            newClubs.forEach(club -> {
+                clubs.add(club);
+            });
             student.setClubs(clubs);
             createdClubs = new ArrayList<>(studentRepo.save(student).getClubs());
-        }
-        if(createdClubs == null && !clubIds.isEmpty()){
-            return null;
-        }else {
-            List<ClubResponseDto> clubResponseDtos = mapper.convertClubEntityToDto(createdClubs);
+            clubResponseDtos = mapper.convertClubEntityToDto(createdClubs);
             logger.info("Student assigned to club successfully whose rollNo {}", student.getId());
-            return mapper.convertStudentAddClubEntityToDto(clubResponseDtos, clubIds);
+        }
+        //If the api request is empty
+        if(createdClubs == null && noExistClubIds.isEmpty() && alreadyAddedClubs.isEmpty()) {
+            return null;
+        }else{
+            return mapper.convertToAddStudentToClubResponseDto(clubResponseDtos, noExistClubIds, alreadyAddedClubs);
         }
     }
 
@@ -184,11 +217,11 @@ public class StudentServiceImpl implements StudentService{
     public StudentResponseDto updateStudent(String id, UpdateStudentDto updateStudentDto) {
         Student existingStudent = studentRepo.findById(id)
                 .orElseThrow(() -> new StudentException("No Student enrolled with this rollNo " + id));
-
+        //update the student details
         existingStudent.setName(updateStudentDto.getName());
         existingStudent.setMark(updateStudentDto.getMark());
         existingStudent.setDob(updateStudentDto.getDob());
-
+        //update the address details of student
         AddressRequestDto updatedAddress = updateStudentDto.getAddress();
         if (updatedAddress != null) {
             Address existingAddress = existingStudent.getAddress();
@@ -198,14 +231,14 @@ public class StudentServiceImpl implements StudentService{
             existingAddress.setState(updatedAddress.getState());
             existingAddress.setPincode(updatedAddress.getPincode());
         }
-
+        //update the grade detail of student
         Grade grade = gradeService.getGradeOfStandardAndSection(mapper.convertUpdateGradeDtoToEntity(updateStudentDto.getGrade()));
         if(grade != null){
                 if(grade.getSectionCount() > 0){
                     existingStudent.setGrade(grade);
             }
         }
+        //convert the Student entity into StudentResponseDto
         return mapper.convertEntityToDto(studentRepo.save(existingStudent));
-
     }
 }

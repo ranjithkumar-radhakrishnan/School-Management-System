@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.i2i.sms.exception.StudentException;
 import com.i2i.sms.helper.Validator;
-import com.i2i.sms.utils.CommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.i2i.sms.dto.AddressRequestDto;
 import com.i2i.sms.dto.AddStudentToClubResponseDto;
-import com.i2i.sms.dto.GradeRequestDto;
 import com.i2i.sms.dto.StudentAssignClubDto;
 import com.i2i.sms.dto.StudentRequestDto;
 import com.i2i.sms.dto.StudentResponseDto;
@@ -26,7 +23,7 @@ import com.i2i.sms.utils.DateUtil;
 * Implementation to handle student, grade and their address.
 */
 @RestController
-@RequestMapping("/sms/api/v1/students")
+@RequestMapping("/v1/students")
 public class StudentController {
 
     @Autowired
@@ -46,16 +43,15 @@ public class StudentController {
     */
     @PostMapping
     public ResponseEntity<?> addStudentDetail(@RequestBody StudentRequestDto studentRequestDto) {
-
         try {
-            ResponseEntity<?> responseEntity = validRequest(studentRequestDto);
+            //To validate the request api
+            ResponseEntity<?> responseEntity = validator.validRequest(studentRequestDto);
             if (null == responseEntity) {
                 StudentResponseDto studentResponseDto = studentService.createStudentDetail(studentRequestDto);
                 if (studentResponseDto != null) {
-                    int age = DateUtil.getDifferenceBetweenDateByYears(studentResponseDto.getDob(), null);
-                    studentResponseDto.setAge(age);
                     return new ResponseEntity<>(studentResponseDto, HttpStatus.CREATED);
                 } else {
+                    //If the grade count gets fulled
                     return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
                 }
             }else{
@@ -63,89 +59,9 @@ public class StudentController {
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * <p>
-     * Validates the Student information such as name, mark, dob
-     * Student information are gathered by in the form of StudentRequestDto
-     * </p>
-     *
-     * @param studentRequestDto {@link StudentRequestDto}
-     * @return ResponseEntity as null if validated or else send Http bad request
-     */
-    private ResponseEntity<?> validRequest(StudentRequestDto studentRequestDto) {
-        if (CommonUtil.isValidString(studentRequestDto.getName())) {
-            if (CommonUtil.isValidRangeOfNumber(studentRequestDto.getMark(), 0, 100)) {
-                if (null != DateUtil.validateDateFormat(studentRequestDto.getDob().toString())) {
-                    int age = DateUtil.getDifferenceBetweenDateByYears(studentRequestDto.getDob(), null);
-                    if (CommonUtil.isValidRangeOfNumber(age, 6, 17)) {
-                        return validateAddressRequest(studentRequestDto);
-                    } else {
-                        return new ResponseEntity<>("Student age not valid for the grade, Invalid age: " + age, HttpStatus.BAD_REQUEST);
-                    }
-                } else {
-                    return new ResponseEntity<>("Invalid Date provided, it should be in format yyyy-MM-dd", HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity<>("Invalid Mark range, it should be between 0 to 100", HttpStatus.BAD_REQUEST);
-            }
-        } else {
-            return new ResponseEntity<>("Invalid Student Name " + studentRequestDto.getName(), HttpStatus.BAD_REQUEST);
-        }
-    }
-    /**
-     * <p>
-     * Validates the Address of the student
-     * Student information are gathered by in the form of StudentRequestDto
-     * </p>
-     * @param studentRequestDto {@link StudentRequestDto}
-     * @return ResponseEntity as null if validated or else send Http bad request
-     */
-    private ResponseEntity<?> validateAddressRequest(StudentRequestDto studentRequestDto) {
-        AddressRequestDto addressRequestDto = studentRequestDto.getAddress();
-        if(CommonUtil.isValidString(addressRequestDto.getStreet())){
-            if(CommonUtil.isValidString(addressRequestDto.getCity())){
-                if(CommonUtil.isValidString(addressRequestDto.getState())){
-                    if(CommonUtil.isValidNumber(Integer.toString(addressRequestDto.getPincode()))){
-                        return validateGradeRequest(studentRequestDto.getGrade());
-                    }else{
-                        return new ResponseEntity<>("Invalid Pincode " + addressRequestDto.getPincode(), HttpStatus.BAD_REQUEST);
-                    }
-                }else{
-                    return new ResponseEntity<>("Invalid State Name " + addressRequestDto.getState(), HttpStatus.BAD_REQUEST);
-                }
-            }else{
-                return new ResponseEntity<>("Invalid City name: " + addressRequestDto.getCity(), HttpStatus.BAD_REQUEST);
-            }
-        }else{
-            return new ResponseEntity<>("Invalid Street name: " + addressRequestDto.getStreet(), HttpStatus.BAD_REQUEST);
-        }
-    }
-    /**
-     * <p>
-     * Validates the grade of the student
-     * Grade information are gathered by in the form of GradeRequestDto
-     * </p>
-     * @param gradeRequestDto {@link GradeRequestDto}
-     * @return ResponseEntity as null if validated or else send Http bad request
-     */
-    private ResponseEntity<?> validateGradeRequest(GradeRequestDto gradeRequestDto) {
-        if(CommonUtil.isValidRangeOfNumber(gradeRequestDto.getStandard(), 1, 12)){
-            if(CommonUtil.isUppercaseCharacter(gradeRequestDto.getSection())){
-                if(CommonUtil.isValidNumber(Integer.toString(gradeRequestDto.getSectionCount()))){
-                    return null;
-                }else{
-                    return new ResponseEntity<>("Invalid Section count, it should be integer: " + gradeRequestDto.getSectionCount(), HttpStatus.BAD_REQUEST);
-                }
-            }else{
-                return new ResponseEntity<>("Invalid Section, it should be uppercase character: " + gradeRequestDto.getSection(), HttpStatus.BAD_REQUEST);
-            }
-        }else{
-            return new ResponseEntity<>("Invalid Standard, it should be range from 1 to 12: " + gradeRequestDto.getStandard(), HttpStatus.BAD_REQUEST);
-        }
+        //return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -162,8 +78,6 @@ public class StudentController {
     public ResponseEntity<StudentResponseDto> getStudentDetailByRollNo(@PathVariable("id") String id) {
          try {
              StudentResponseDto studentResponseDto = studentService.getStudentDetailByRollNo(id);
-             int age = DateUtil.getDifferenceBetweenDateByYears(studentResponseDto.getDob(),null);
-             studentResponseDto.setAge(age);
              return new ResponseEntity<>(studentResponseDto, HttpStatus.OK);
          }catch (Exception e){
              logger.error(e.getMessage(), e);
@@ -199,19 +113,19 @@ public class StudentController {
     */
     @GetMapping
     public ResponseEntity<List<StudentResponseDto>> printAllStudentsInformation() {
-        List<StudentResponseDto> studentResponseDtos = studentService.showAllStudentDetails();
-        if(studentResponseDtos != null){
-            studentResponseDtos.forEach(studentResponse -> {
-                        int age = DateUtil.getDifferenceBetweenDateByYears(studentResponse.getDob(), null);
-                        logger.debug("Calculates the student age " + age + " by their DOB ");
-                        studentResponse.setAge(age);
-                    });
-            logger.info("Student detail retrieved successfully");
-            return new ResponseEntity<>(studentResponseDtos, HttpStatus.OK);
-        }else{
-            logger.info("No Students enrolled yet");
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        try {
+            List<StudentResponseDto> studentResponseDtos = studentService.showAllStudentDetails();
+            if (studentResponseDtos != null) {
+                logger.info("Student detail retrieved successfully");
+                return new ResponseEntity<>(studentResponseDtos, HttpStatus.OK);
+            } else {
+                logger.info("No Students enrolled yet");
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage(), e);
         }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
    /**
@@ -225,19 +139,25 @@ public class StudentController {
     * @return ResponseEntity of AddStudentToClubResponseDto if student added to club or else http status NOT_FOUND
     */
    @PostMapping("/{id}/clubs")
-    public ResponseEntity<AddStudentToClubResponseDto> addStudentToClub(@PathVariable("id") String id, @RequestBody StudentAssignClubDto studentAssignClubDto) {
+   public ResponseEntity<AddStudentToClubResponseDto> addStudentToClub(@PathVariable("id") String id, @RequestBody StudentAssignClubDto studentAssignClubDto) {
        try {
            AddStudentToClubResponseDto addStudentToClubResponseDto = studentService.assignStudentToClub(id, studentAssignClubDto);
-           if (addStudentToClubResponseDto != null) {
-               return ResponseEntity.status(HttpStatus.CREATED).body(addStudentToClubResponseDto);
+           //If request api is empty list
+           if (addStudentToClubResponseDto == null) {
+               return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+               //If request api contain club Id which does not exist
+           } else if (!addStudentToClubResponseDto.getNoClubsExist().isEmpty() &&
+                   addStudentToClubResponseDto.getAddedClubs() == null &&
+                   addStudentToClubResponseDto.getAlreadyAddedClubs().isEmpty()) {
+               return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
            } else {
-               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+               return new ResponseEntity<>(addStudentToClubResponseDto, HttpStatus.OK);
            }
-       }catch (Exception e){
-               logger.error(e.getMessage(), e);
+       } catch (Exception e) {
+           logger.error(e.getMessage(), e);
        }
-       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
+       return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+   }
 
     /**
      * <p>
@@ -250,20 +170,20 @@ public class StudentController {
      * @return ResponseEntity of StudentResponseDto if student updated or else http status NOT_FOUND
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable("id") String id, @RequestBody UpdateStudentDto updateStudentDto){
+    public ResponseEntity<?> updateStudent(@PathVariable("id") String id, @RequestBody UpdateStudentDto updateStudentDto) {
         try {
-            ResponseEntity<?> responseEntity = validator.validRequest(updateStudentDto);
-            if(null == responseEntity) {
+            ResponseEntity<?> responseEntity = validator.validUpdateRequest(updateStudentDto);
+            if (null == responseEntity) {
                 StudentResponseDto studentResponseDto = studentService.updateStudent(id, updateStudentDto);
                 int age = DateUtil.getDifferenceBetweenDateByYears(studentResponseDto.getDob(), null);
                 studentResponseDto.setAge(age);
                 return new ResponseEntity<>(studentResponseDto, HttpStatus.OK);
-            }else{
+            } else {
                 return responseEntity;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No student enrolled with this id " + id, HttpStatus.NOT_FOUND);
     }
 }

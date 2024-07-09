@@ -18,7 +18,7 @@ import com.i2i.sms.service.GradeService;
 import com.i2i.sms.utils.DateUtil;
 
 @RestController
-@RequestMapping("/sms/api/v1/grades")
+@RequestMapping("/v1/grades")
 public class GradeController {
 
     @Autowired

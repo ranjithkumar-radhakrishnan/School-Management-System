@@ -56,7 +56,6 @@ public class ClubServiceImpl implements ClubService {
      */
     public List<ClubResponseDto> getAllClubs() {
         if(!clubRepo.findAll().isEmpty()) {
-            logger.debug("Club is not empty");
             return mapper.convertClubEntityToDto(clubRepo.findAll());
         }else{
             return null;
@@ -75,9 +74,13 @@ public class ClubServiceImpl implements ClubService {
     public List<StudentResponseDto> showAllStudentsOfClub(String clubId) {
         Club club = clubRepo.findById(clubId)
                 .orElseThrow(() -> new ClubException("No club available with this Id "+clubId));
-        //Convert Set of student into List of student
-        List<Student> students = new ArrayList<>(club.getStudents());
-        return mapper.covertStudentEntityToDto(students);
+        if(club.getStudents() != null) {
+            //Convert Set of student into List of student
+            List<Student> students = new ArrayList<>(club.getStudents());
+            return mapper.covertStudentEntityToDto(students);
+        }else{
+            return null;
+        }
     }
     /**
      * <p>
@@ -88,7 +91,7 @@ public class ClubServiceImpl implements ClubService {
      *        Id of the club as String
      * @return Club if existed
      */
-    public Club getClubs(String clubId){
+    public Club getClub(String clubId){
         return clubRepo.findById(clubId).orElse(new Club());
     }
     /**
